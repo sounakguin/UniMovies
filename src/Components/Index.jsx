@@ -2,15 +2,13 @@ import React, { useState, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
-import Popular from "./Popular";
-import Upcoming from "./Upcoming";
-import Toprated from "./Toprated";
-import Movielist from "./Movielist";
+import Movielist from "../Components/Movielist"
+
+
 
 export default function Index() {
   const [fetchData, setFetchData] = useState([]);
-  const [activeComponent, setActiveComponent] = useState("Popular");
-
+ 
   const ApiData = async () => {
     try {
       const res = await fetch(
@@ -27,13 +25,22 @@ export default function Index() {
     ApiData();
   }, []);
 
+  // Preload images
+  useEffect(() => {
+    fetchData.forEach((movie) => {
+      const img = new Image();
+      img.src = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
+    });
+  }, [fetchData]);
+
   return (
     <div>
       <div className="poster">
         <Carousel
           showThumbs={false}
           autoPlay={true}
-          transitionTime={3}
+          transitionTime={1000} 
+          interval={5000} 
           infiniteLoop={true}
           showStatus={false}
         >
@@ -42,7 +49,7 @@ export default function Index() {
               <Link
                 key={movie.id}
                 style={{ textDecoration: "none", color: "white" }}
-                to={``}
+                to={`/movie/${movie.id}`}
               >
                 <div className="posterImage">
                   <img
@@ -68,7 +75,9 @@ export default function Index() {
               </Link>
             ))}
         </Carousel>
-        <Movielist/>
+ 
+
+    <Movielist/>
       </div>
     </div>
   );

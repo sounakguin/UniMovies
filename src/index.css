@@ -151,6 +151,7 @@ body,
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden; /* Ensure no overflow issues */
 }
 
 .movie__intro {
@@ -165,11 +166,14 @@ body,
 }
 
 .movie__detail {
-  align-items: center;
   width: 75%;
   display: flex;
   position: relative;
-  bottom: 225px;
+  z-index: 1; /* Ensure content stays above backdrop */
+  margin-top: -225px; /* Adjust the vertical position using negative margin */
+  background-color: rgba(0, 0, 0, 0); /* Example overlay background */
+  padding: 20px;
+  border-radius: 10px; /* Optional: rounded corners for overlay */
 }
 
 .movie__detailLeft {
@@ -182,14 +186,16 @@ body,
   width: 300px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.86) 0px 22px 40px 6px;
+  z-index: 2; /* Ensure poster is above overlay */
 }
 
 .movie__detailRight {
   color: white;
   display: flex;
   flex-direction: column;
-  height: 450px;
   justify-content: space-between;
+  flex: 1; /* Fill remaining space vertically */
+  z-index: 2; /* Ensure content is above overlay */
 }
 
 .movie__detailRightTop > div {
@@ -197,10 +203,6 @@ body,
   margin-bottom: 0.5rem;
 }
 
-.movie__name {
-  font-weight: 600;
-  font-size: 3rem;
-}
 
 .movie__voteCount {
   margin-left: 1rem;
@@ -217,6 +219,59 @@ body,
   font-size: 1.5rem;
   font-weight: 600;
   display: flex;
-  position: relative;
   align-items: center;
+margin-top: 0px;
 }
+
+
+
+
+
+.login {
+  background-image: url(../Images/ok.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+
+.movie-section {
+  margin: 20px 0;
+}
+
+
+
+
+
+.movie-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.movie-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+
+
+h3 {
+  text-align: center;
+  margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+

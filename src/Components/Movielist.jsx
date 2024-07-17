@@ -1,118 +1,103 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPopularTvShows, fetchTopRatedMovies } from '../Allmovies/AllmovieSlice';
+import "react-multi-carousel/lib/styles.css";
+import Carousel from 'react-multi-carousel';
+import LatestMovieTrailers from './LatestMovieTrailers';
 
-export default function Movielist() {
-  const [category, setCategory] = useState("popular");
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const ApiData = async () => {
-    try {
-      const res = await fetch(
-        `https://api.themoviedb.org/3/movie/${category}?api_key=d00cb3e60d55a92130bdafb5ff634708`
-      );
-      const data = await res.json();
-      setMovies(data.results);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setIsLoading(false);
+const responsive = {
+    superLargeDesktop: {
+        breakpoint: { max: 4000, min: 3000 },
+        items: 5
+    },
+    desktop: {
+        breakpoint: { max: 3000, min: 1024 },
+        items: 5
+    },
+    tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 2
+    },
+    mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 1
     }
-  };
+};
 
-  useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      ApiData();
-    }, 1500);
-  }, [category]);
+const MovieList = () => {
+    const dispatch = useDispatch();
+    const { popularTvShows, topRatedMovies, status, error } = useSelector((state) => state.tmdb); // <-- Corrected state key name
 
-  const skeletonCards = Array(5).fill();
+    useEffect(() => {
+        // Fetch popular and top rated movies on component mount
+        dispatch(fetchTopRatedMovies());
+        dispatch(fetchPopularTvShows());
+    }, [dispatch]);
 
-  return (
-    <div>
-      <div className="flex mt-10 justify-center items-center">
-        <button
-          type="button"
-          className="p-2 bg-blue-600 text-white"
-          onClick={() => setCategory("popular")}
-        >
-          Popular
-        </button>
-        <button
-          type="button"
-          className="p-2 bg-yellow-600 text-white ml-4"
-          onClick={() => setCategory("upcoming")}
-        >
-          Upcoming
-        </button>
-        <button
-          type="button"
-          className="p-2 bg-red-600 text-white ml-4"
-          onClick={() => setCategory("top_rated")}
-        >
-          Top Rated
-        </button>
-      </div>
-      <div className="mx-auto w-3/4 mt-5">
-        {isLoading ? (
-          <div className="Animatedcards">
-            <SkeletonTheme color="#202020" highlightColor="#444">
-              {skeletonCards.map((_, index) => (
-                <div key={index} className="Animatedcards">
-                  <Skeleton height={300} duration={2} />
-                  <Skeleton
-                    width={`60%`}
-                    height={20}
-                    style={{ marginTop: 10 }}
-                  />
-                  <Skeleton
-                    width={`80%`}
-                    height={20}
-                    style={{ marginTop: 10 }}
-                  />
-                  <Skeleton
-                    width={`40%`}
-                    height={20}
-                    style={{ marginTop: 10 }}
-                  />
-                </div>
-              ))}
-            </SkeletonTheme>
-          </div>
-        ) : (
-          movies.map((movie, index) => (
-            <Link
-              to={`/movie/${movie.id}`}
-              style={{ textDecoration: "none", color: "white" }}
-              key={index}
-            >
-              <div className="cards">
-                <img
-                  className="cards__img"
-                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                  alt={movie.original_title}
-                />
-                <div className="cards__overlay">
-                  <div className="card__title">{movie.original_title}</div>
-                  <div className="card__runtime">
-                    {movie.release_date}
-                    <span className="card__rating">
-                      {movie.vote_average}
-                      <i className="fas fa-star" />
-                    </span>
-                  </div>
-                  <div className="card__description">
-                    {movie.overview.slice(0, 115) + "..."}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))
-        )}
-      </div>
-    </div>
-  );
-}
+    // Handle loading state
+    if (status === 'loading') {
+        return <div>Loading...</div>;
+    }
+
+    // Handle error state
+    if (status === 'failed') {
+        return <div>Error: {error}</div>;
+    }
+
+    return (
+        <div>
+            <section className="movie-section">
+                <h2 className='text-white'>Popular Movies</h2>
+                <Carousel
+                    responsive={responsive}
+                    infinite={true}
+                    autoPlay={true}
+                    autoPlaySpeed={5000}
+                    keyBoardControl={true}
+                    transitionDuration={1000}
+                    arrows={true}
+                    showDots={false}
+                >
+                    {popularTvShows.map((movie) => (
+                        <div key={movie.id} className="movie-item">
+                            <img
+                                src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                                alt={movie.title}
+                                className='carousel-img'
+                            />
+                        </div>
+                    ))}
+                </Carousel>
+            </section>
+
+            {/* Display latest movie trailers */}
+            <LatestMovieTrailers />
+
+            <section className="movie-section">
+                <h2 className='text-white'>Top Rated Movies</h2>
+                <Carousel
+                    responsive={responsive}
+                    infinite={true}
+                    autoPlay={true}
+                    autoPlaySpeed={5000}
+                    keyBoardControl={true}
+                    transitionDuration={1000}
+                    arrows={true}
+                    showDots={false}
+                >
+                    {topRatedMovies.map((movie) => (
+                        <div key={movie.id} className="movie-item">
+                            <img
+                                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                                alt={movie.title}
+                                className='carousel-img'
+                            />
+                        </div>
+                    ))}
+                </Carousel>
+            </section>
+        </div>
+    );
+};
+
+export default MovieList;
