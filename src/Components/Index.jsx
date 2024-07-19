@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
-import Movielist from "../Components/Movielist"
-
-
+import Movielist from "../Components/Movielist";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 export default function Index() {
   const [fetchData, setFetchData] = useState([]);
- 
+  const [isMobile, setIsMobile] = useState(false);
+
   const ApiData = async () => {
     try {
       const res = await fetch(
@@ -25,59 +26,86 @@ export default function Index() {
     ApiData();
   }, []);
 
-  // Preload images
   useEffect(() => {
     fetchData.forEach((movie) => {
       const img = new Image();
       img.src = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
     });
-  }, [fetchData]);
+  }, [fetchData, isMobile]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); // Adjust breakpoint as needed
+    };
+
+    // Initial check on mount
+    handleResize();
+
+    // Listen to window resize events
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
-    <div>
-      <div className="poster">
+    <div className="index-container">
+      <div className="poster ">
         <Carousel
           showThumbs={false}
           autoPlay={true}
-          transitionTime={1000} 
-          interval={5000} 
+          transitionTime={2000}
+          interval={5000} // Adjust interval as needed for smooth transition
           infiniteLoop={true}
           showStatus={false}
+          showIndicators={false}
+          showArrows={!isMobile} // Show arrows only on desktop
+          showDots={false}
         >
-          {fetchData &&
-            fetchData.map((movie) => (
-              <Link
-                key={movie.id}
-                style={{ textDecoration: "none", color: "white" }}
-                to={`/movie/${movie.id}`}
-              >
-                <div className="posterImage">
-                  <img
-                    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                    alt={movie.original_title}
-                  />
-                </div>
-                <div className="posterImage__overlay">
-                  <div className="posterImage__title">
-                    {movie ? movie.original_title : ""}
+          {fetchData.map((movie) => (
+            <Link
+              key={movie.id}
+              className="text-white no-underline"
+              to={`/movie/${movie.id}`}
+            >
+              <div className="posterImage relative">
+                <img
+                  src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                  alt={movie.original_title}
+                  className="w-full h-auto"
+                />
+                <div className="posterImage__overlay absolute bottom-0 left-0 right-0 text-white p-4 ">
+                  <div className="posterImage__title ">
+                    <div className=" text-4xl w-auto  md:text-left md:text-7xl md:ml-12 ml-0">
+                      {movie.original_title}
+                    </div>
                   </div>
-                  <div className="posterImage__runtime">
-                    {movie ? movie.release_date : ""}
-                    <span className="posterImage__rating">
-                      {movie ? movie.vote_average : ""}
-                      <i className="fas fa-star" />{" "}
+                  <div className="posterImage__runtime flex mt-2 justify-between items-center ">
+                    <div className="text-lg md:text-3xl text-center md:text-left">
+                      {movie.release_date}
+                    </div>
+                    <span className="posterImage__rating text-lg md:text-3xl text-center md:text-left">
+                      <FontAwesomeIcon className="text-yellow-400" icon={faStar} />{" "}
+                      {movie.vote_average}
                     </span>
                   </div>
-                  <div className="posterImage__description">
-                    {movie ? movie.overview : ""}
+                 {
+                  !isMobile && 
+                  <div className="posterImage__description mt-2">
+                  <div className="hidden md:block">
+                    {movie.overview}
                   </div>
                 </div>
-              </Link>
-            ))}
+                 }
+                </div>
+              </div>
+            </Link>
+          ))}
         </Carousel>
- 
-
-    <Movielist/>
+        <div className="w-3/4 mx-auto">  <Movielist /></div>
+      
       </div>
     </div>
   );

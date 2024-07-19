@@ -107,39 +107,40 @@ export default function AllmoviesTMDB() {
       <GenreFilter
         genres={genres}
         selectedGenre={selectedGenre}
-        movie={movies}
         handleGenreClick={handleGenreClick}
       />
       <div className="mx-auto w-3/4 mt-5">
-        {movies.map((movie, index) => (
-          <Link
-            to={`/movie/${movie.id}`}
-            style={{ textDecoration: "none", color: "white" }}
-            key={movie.id}
-            ref={index === movies.length - 1 ? lastMovieElementRef : null}
-          >
-            <div className="cards">
-              <img
-                className="cards__img"
-                src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                alt={movie.original_title}
-              />
-              <div className="cards__overlay">
-                <div className="card__title">{movie.original_title}</div>
-                <div className="card__runtime">
-                  {movie.release_date}
-                  <span className="card__rating">
-                    {movie.vote_average}
-                    <i className="fas fa-star" />
-                  </span>
-                </div>
-                <div className="card__description">
-                  {movie.overview.slice(0, 115) + "..."}
+        <div className="flex flex-wrap justify-center md:justify-start">
+          {movies.map((movie, index) => (
+            <Link
+              to={`/movie/${movie.id}`}
+              style={{ textDecoration: "none", color: "white" }}
+              key={movie.id}
+              ref={index === movies.length - 1 ? lastMovieElementRef : null}
+            >
+              <div className="cards m-2">
+                <img
+                  className="cards__img"
+                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                  alt={movie.original_title}
+                />
+                <div className="cards__overlay">
+                  <div className="card__title">{movie.original_title}</div>
+                  <div className="card__runtime">
+                    {movie.release_date}
+                    <span className="card__rating">
+                      {movie.vote_average}
+                      <i className="fas fa-star" />
+                    </span>
+                  </div>
+                  <div className="card__description">
+                    {movie.overview.slice(0, 115) + "..."}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
         {isLoading && <div>Loading...</div>}
       </div>
     </div>

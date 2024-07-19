@@ -5,7 +5,7 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 
 // Async thunks for fetching data from TMDB API
 export const fetchTopRatedMovies = createAsyncThunk('tmdb/fetchTopRatedMovies', async () => {
-    const response = await fetch(`${BASE_URL}/movie/top_rated?api_key=${API_KEY}`);
+    const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}`);
     const data = await response.json();
     return data.results;
 });

@@ -13,6 +13,7 @@ import People from "./Components/People/People";
 import TV from "./Components/TV/TV";
 import TVDetails from "./Components/TV/TVDetails";
 import SinglepagePeople from "./Components/People/SinglepagePeople"
+import Footer from "./Components/Footer";
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
           <Route path="/person/:id" element={<SinglepagePeople/>} />
         
         </Routes>
-        <ToastContainer />
+    
       </div>
     </Router>
   );

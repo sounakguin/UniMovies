@@ -15,7 +15,7 @@ const LatestMovieTrailers = () => {
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 4,
+      items: 3,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
@@ -66,8 +66,8 @@ const LatestMovieTrailers = () => {
   }, []);
 
   return (
-    <div id="w-3/4 mx-auto">
-      <div>
+    <div id=" ">
+      <div >
         <Carousel
           responsive={responsive}
           infinite={true}
@@ -87,7 +87,7 @@ const LatestMovieTrailers = () => {
             key={trailer.id}
             src={`https://www.youtube.com/embed/${trailer.key}`}
             title={trailer.name}
-            className="w-auto h-52 border-none"
+            className=" min-w-80 h-52 border-none"
             allowFullScreen
           />
           </div>

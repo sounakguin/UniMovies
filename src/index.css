@@ -13,8 +13,15 @@ body,
   background-color: black;
 }
 
+/* Custom CSS */
 .posterImage {
-  height: 700px;
+  height: 600px;
+}
+
+@media (max-width: 767px) {
+  .posterImage {
+    height: auto;
+  }
 }
 
 .posterImage > img {
@@ -22,6 +29,7 @@ body,
   display: block;
   width: 100%;
 }
+
 
 .posterImage__overlay {
   position: absolute;
@@ -55,7 +63,7 @@ body,
 }
 
 .posterImage__rating {
-  margin-left: 3rem;
+  margin-left: 1rem;
 }
 
 .posterImage__description {

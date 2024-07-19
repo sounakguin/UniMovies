@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import  { Link  } from "react-router-dom"
+import SearchbarPeople from "./SearchbarPeople";
 
 export default function People() {
   const [people, setPeople] = useState([]);
@@ -48,9 +49,15 @@ export default function People() {
     };
   }, []);
 
+  const handeldata = (data) => {
+    setPeople(data);
+  };
+  
   return (
     <div className="w-3/4 mx-auto">
-      <div className="flex flex-wrap justify-center">
+    <SearchbarPeople onSearch={handeldata} />
+    
+      <div className="flex flex-wrap justify-center mt-5">
         {people.map((actor) => (
           <div key={actor.id} className="m-2">
             <Link  to={`/person/${actor.id}`}>
