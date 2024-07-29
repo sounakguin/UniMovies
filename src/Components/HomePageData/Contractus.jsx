@@ -29,7 +29,7 @@ function ContactForm() {
     <div
       className="flex items-center justify-center p-4"
       style={{
-        backgroundImage: "url('public/Images/marvel.jpg')",
+        backgroundImage: "url('Images/marvel.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
