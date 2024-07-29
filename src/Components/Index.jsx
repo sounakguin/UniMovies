@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect, lazy } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
@@ -109,10 +109,10 @@ export default function Index() {
         <div className="mx-auto">
           <Movielist />
         </div>
-        <Suspense fallback={<div>Loading Contact Us...</div>}>
+   
         <p className="text-white  text-3xl pl-0 md:pl-4 pb-5">Connect With Us</p>
           <Contactus />
-        </Suspense>
+        
         <Footer/>
       </div>
     
