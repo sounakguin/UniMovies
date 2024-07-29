@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
-import Movielist from "../Components/Movielist";
+import Movielist from "../Components/HomePageData/Movielist";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import Footer from "../Components/Footer"
+
+const Contactus = lazy(() => import("./HomePageData/Contractus"));
 
 export default function Index() {
   const [fetchData, setFetchData] = useState([]);
@@ -35,16 +38,16 @@ export default function Index() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Adjust breakpoint as needed
+      setIsMobile(window.innerWidth < 768); 
     };
 
-    // Initial check on mount
+  
     handleResize();
 
-    // Listen to window resize events
+  
     window.addEventListener("resize", handleResize);
 
-    // Clean up event listener on unmount
+    
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -52,16 +55,16 @@ export default function Index() {
 
   return (
     <div className="index-container">
-      <div className="poster ">
+      <div className="poster">
         <Carousel
           showThumbs={false}
           autoPlay={true}
           transitionTime={2000}
-          interval={5000} // Adjust interval as needed for smooth transition
+          interval={5000} 
           infiniteLoop={true}
           showStatus={false}
           showIndicators={false}
-          showArrows={!isMobile} // Show arrows only on desktop
+          showArrows={!isMobile}
           showDots={false}
         >
           {fetchData.map((movie) => (
@@ -91,22 +94,28 @@ export default function Index() {
                       {movie.vote_average}
                     </span>
                   </div>
-                 {
-                  !isMobile && 
-                  <div className="posterImage__description mt-2">
-                  <div className="hidden md:block">
-                    {movie.overview}
-                  </div>
-                </div>
-                 }
+                  {!isMobile && 
+                    <div className="posterImage__description mt-2">
+                      <div className="hidden md:block">
+                        {movie.overview}
+                      </div>
+                    </div>
+                  }
                 </div>
               </div>
             </Link>
           ))}
         </Carousel>
-        <div className="w-3/4 mx-auto">  <Movielist /></div>
-      
+        <div className="mx-auto">
+          <Movielist />
+        </div>
+        <Suspense fallback={<div>Loading Contact Us...</div>}>
+        <p className="text-white  text-3xl pl-0 md:pl-4 pb-5">Connect With Us</p>
+          <Contactus />
+        </Suspense>
+        <Footer/>
       </div>
+    
     </div>
   );
 }

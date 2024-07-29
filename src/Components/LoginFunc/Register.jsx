@@ -1,8 +1,8 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import { auth, db } from "./Firebase";
+import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
-import { toast } from "react-toastify";
+import { auth, db } from "../LoginFunc/Firebase";
 
 function Register() {
   const [formdata, setformData] = useState({
@@ -10,7 +10,7 @@ function Register() {
     password: "",
     confirmpassword: "",
     fullname: "",
-    phone: ""
+    phone: "",
   });
 
   const [error, setError] = useState({
@@ -18,20 +18,22 @@ function Register() {
     password: "",
     confirmpassword: "",
     fullname: "",
-    phone: ""
+    phone: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setformData({
       ...formdata,
-      [name]: value
+      [name]: value,
     });
 
     // Clear previous error for the field when typing
     setError({
       ...error,
-      [name]: ""
+      [name]: "",
     });
   };
 
@@ -64,16 +66,18 @@ function Register() {
       password: "",
       confirmpassword: "",
       fullname: "",
-      phone: ""
+      phone: "",
     };
 
     if (!validatePhoneNumber(phone)) {
-      newErrors.phone = "Phone number must start with +91 and be 10 digits long";
+      newErrors.phone =
+        "Phone number must start with +91 and be 10 digits long";
       hasError = true;
     }
 
     if (!validatePassword(password)) {
-      newErrors.password = "Password must contain at least one special character, one number, one letter, and be 8 characters long";
+      newErrors.password =
+        "Password must contain at least one special character, one number, one letter, and be 8 characters long";
       hasError = true;
     }
 
@@ -93,7 +97,11 @@ function Register() {
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
       console.log("User created:", user);
 
@@ -102,35 +110,33 @@ function Register() {
         Email: user.email,
         FullName: fullname,
         PhoneNumber: phone,
-        Password: password
-
+        Password: password,
       });
       console.log("Data stored in Firestore");
 
-      toast.success("User Registered Successfully!!", {
-        position: "top-center",
-      });
-
-      // Clear the form fields after successful registration
+      // Clear form data and errors
       setformData({
         email: "",
         password: "",
         confirmpassword: "",
         fullname: "",
-        phone: ""
+        phone: "",
       });
-      setError({}); // Clear any previous errors
+      setError({});
+
+      // Redirect to login page
+      navigate('/login');
     } catch (error) {
       console.log("Error registering user:", error.message);
-      toast.error(error.message, {
-        position: "bottom-center",
-      });
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen  login">
-      <form onSubmit={handleRegister} className="bg-gray-200 p-6 rounded shadow-md w-full max-w-sm">
+    <div className="flex justify-center items-center min-h-screen login">
+      <form
+        onSubmit={handleRegister}
+        className="bg-gray-200 p-6 rounded shadow-md w-full max-w-sm"
+      >
         <h3 className="text-2xl font-bold mb-4">Sign Up</h3>
 
         <div className="mb-4">
@@ -138,13 +144,17 @@ function Register() {
           <input
             type="text"
             name="fullname"
-            className={`w-full px-3 py-2 border ${error.fullname ? 'border-red-500' : 'border-gray-300'} rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            className={`w-full px-3 py-2 border ${
+              error.fullname ? "border-red-500" : "border-gray-300"
+            } rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
             placeholder="Full name"
             value={formdata.fullname}
             onChange={handleChange}
             required
           />
-          {error.fullname && <p className="text-red-500 text-xs mt-1">{error.fullname}</p>}
+          {error.fullname && (
+            <p className="text-red-500 text-xs mt-1">{error.fullname}</p>
+          )}
         </div>
 
         <div className="mb-4">
@@ -152,13 +162,17 @@ function Register() {
           <input
             type="tel"
             name="phone"
-            className={`w-full px-3 py-2 border ${error.phone ? 'border-red-500' : 'border-gray-300'} rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            className={`w-full px-3 py-2 border ${
+              error.phone ? "border-red-500" : "border-gray-300"
+            } rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
             placeholder="Enter phone number (+91XXXXXXXXXX)"
             value={formdata.phone}
             onChange={handleChange}
             required
           />
-          {error.phone && <p className="text-red-500 text-xs mt-1">{error.phone}</p>}
+          {error.phone && (
+            <p className="text-red-500 text-xs mt-1">{error.phone}</p>
+          )}
         </div>
 
         <div className="mb-4">
@@ -166,13 +180,17 @@ function Register() {
           <input
             type="text"
             name="email"
-            className={`w-full px-3 py-2 border ${error.email ? 'border-red-500' : 'border-gray-300'} rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            className={`w-full px-3 py-2 border ${
+              error.email ? "border-red-500" : "border-gray-300"
+            } rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
             placeholder="Enter email"
             value={formdata.email}
             onChange={handleChange}
             required
           />
-          {error.email && <p className="text-red-500 text-xs mt-1">{error.email}</p>}
+          {error.email && (
+            <p className="text-red-500 text-xs mt-1">{error.email}</p>
+          )}
         </div>
 
         <div className="mb-4">
@@ -180,13 +198,17 @@ function Register() {
           <input
             type="password"
             name="password"
-            className={`w-full px-3 py-2 border ${error.password ? 'border-red-500' : 'border-gray-300'} rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            className={`w-full px-3 py-2 border ${
+              error.password ? "border-red-500" : "border-gray-300"
+            } rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
             placeholder="Enter password"
             value={formdata.password}
             onChange={handleChange}
             required
           />
-          {error.password && <p className="text-red-500 text-xs mt-1">{error.password}</p>}
+          {error.password && (
+            <p className="text-red-500 text-xs mt-1">{error.password}</p>
+          )}
         </div>
 
         <div className="mb-4">
@@ -194,23 +216,33 @@ function Register() {
           <input
             type="password"
             name="confirmpassword"
-            className={`w-full px-3 py-2 border ${error.confirmpassword ? 'border-red-500' : 'border-gray-300'} rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            className={`w-full px-3 py-2 border ${
+              error.confirmpassword ? "border-red-500" : "border-gray-300"
+            } rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
             placeholder="Re-enter password"
             value={formdata.confirmpassword}
             onChange={handleChange}
             required
           />
-          {error.confirmpassword && <p className="text-red-500 text-xs mt-1">{error.confirmpassword}</p>}
+          {error.confirmpassword && (
+            <p className="text-red-500 text-xs mt-1">{error.confirmpassword}</p>
+          )}
         </div>
 
         <div className="flex items-center justify-between mb-4">
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
             Sign Up
           </button>
         </div>
 
         <p className="text-center">
-          Already registered? <a href="/login" className="text-blue-500 hover:underline">Login</a>
+          Already registered?{" "}
+          <a href="/login" className="text-blue-500 hover:underline">
+            Login
+          </a>
         </p>
       </form>
     </div>

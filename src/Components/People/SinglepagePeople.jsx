@@ -9,7 +9,9 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import ok from "../../../public/Images/ok.jpeg"; // Ensure this path is correct
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import ok from "../../../public/Images/ok.jpeg"; 
 
 export default function SinglepagePeople() {
   const [actorPersonalData, setActorPersonalData] = useState(null);
@@ -114,7 +116,7 @@ export default function SinglepagePeople() {
                     href={`https://facebook.com/${actorExternalIds.facebook_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-2xl text-blue-600"
+                    className="text-2xl text-blue-600 transition-transform transform hover:-translate-y-2"
                   >
                     <FontAwesomeIcon icon={faFacebook} />
                   </a>
@@ -124,7 +126,7 @@ export default function SinglepagePeople() {
                     href={`https://twitter.com/${actorExternalIds.twitter_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-2xl text-blue-400"
+                    className="text-2xl text-blue-400 transition-transform transform hover:-translate-y-2"
                   >
                     <FontAwesomeIcon icon={faTwitter} />
                   </a>
@@ -134,7 +136,7 @@ export default function SinglepagePeople() {
                     href={`https://www.instagram.com/${actorExternalIds.instagram_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-2xl text-pink-600"
+                    className="text-2xl text-pink-600 transition-transform transform hover:-translate-y-2"
                   >
                     <FontAwesomeIcon icon={faInstagram} />
                   </a>
@@ -144,7 +146,7 @@ export default function SinglepagePeople() {
                     href={`https://www.imdb.com/name/${actorExternalIds.imdb_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-2xl text-yellow-500"
+                    className="text-2xl text-yellow-500 transition-transform transform hover:-translate-y-2"
                   >
                     <FontAwesomeIcon icon={faImdb} />
                   </a>
@@ -161,8 +163,8 @@ export default function SinglepagePeople() {
         <Carousel
           responsive={responsive}
           infinite={true}
-          autoPlay={false}
-          autoPlaySpeed={0}
+          autoPlay={true}
+          autoPlaySpeed={5000}
           keyBoardControl={true}
           transitionDuration={1000}
           arrows={true}
@@ -171,20 +173,21 @@ export default function SinglepagePeople() {
           itemClass="carousel-item"
         >
           {actorCredits.map((data) => (
-            <Link to={`/movie/${data.id}`}>
-              <div key={data.id} className="px-2 flex justify-center">
+            <Link to={`/movie/${data.id}`} key={data.id}>
+              <div className="px-2 flex justify-center">
                 {data.poster_path ? (
-                  <img
-                    src={`https://image.tmdb.org/t/p/original${data.poster_path} `}
+                  <LazyLoadImage
+                    src={`https://image.tmdb.org/t/p/original${data.poster_path}`}
                     alt={data.title}
+                    effect="blur"
                     className="h-96 w-auto rounded-lg shadow-lg border-2 border-white"
                   />
                 ) : (
                   <img
-                  src={ ok }
-                  alt={data.title}
-                  className="h-96 w-auto rounded-lg shadow-lg border-2 border-white"
-                />
+                    src={ok}
+                    alt={data.title}
+                    className="h-96 w-auto rounded-lg shadow-lg border-2 border-white"
+                  />
                 )}
               </div>
             </Link>
@@ -198,8 +201,8 @@ export default function SinglepagePeople() {
         <Carousel
           responsive={responsive}
           infinite={true}
-          autoPlay={false}
-          autoPlaySpeed={0}
+          autoPlay={true}
+          autoPlaySpeed={5000}
           keyBoardControl={true}
           transitionDuration={1000}
           arrows={true}
@@ -208,10 +211,11 @@ export default function SinglepagePeople() {
           itemClass="carousel-item"
         >
           {actorImages.map((imagedata) => (
-            <div key={imagedata.id} className="px-2 flex justify-center ">
-              <img
+            <div key={imagedata.file_path} className="px-2 flex justify-center ">
+              <LazyLoadImage
                 src={`https://image.tmdb.org/t/p/original${imagedata.file_path}`}
                 alt=""
+                effect="blur"
                 className="h-96 w-auto rounded-lg shadow-lg border-2 border-white"
               />
             </div>

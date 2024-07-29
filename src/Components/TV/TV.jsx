@@ -91,8 +91,10 @@ export default function TV() {
 
   return (
     <div>
+         <br />
       <SearchTVdata Searchdata={handleSearch} />
-      <br></br>
+      <br />
+      <br />
       <FilterTV
         genres={tvGenres}
         selectedGenre={selectedGenre}

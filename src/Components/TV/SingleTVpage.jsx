@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
+
 export default function SingleTVpage() {
   const API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
   const { id } = useParams();
@@ -13,6 +14,44 @@ export default function SingleTVpage() {
   const [credits, setCredits] = useState([]);
 
   const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 6,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 5,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
+
+  const responsive2 = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 7,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 6,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
+
+  const responsive3 = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
       items: 5,
@@ -30,26 +69,9 @@ export default function SingleTVpage() {
       items: 1,
     },
   };
-
-  const responsive2 = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 5,
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 5,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-    },
-  };
-
+  
+  
+ 
   useEffect(() => {
     const fetchTVData = async () => {
       try {
@@ -103,7 +125,7 @@ export default function SingleTVpage() {
   return (
     <div className="container mx-auto p-4">
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-white">Credits</h2>
+        <h2 className="text-xl font-semibold pl-0 md:pl-2 text-white">Credits</h2>
         <Carousel
           responsive={responsive2}
           infinite={true}
@@ -131,11 +153,11 @@ export default function SingleTVpage() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4 mt-5 text-white">
+        <h2 className="text-xl font-semibold mb-4 mt-5 pl-0 md:pl-4 text-white">
           Watch Videos and Trailers
         </h2>
         <Carousel
-          responsive={responsive}
+          responsive={responsive3}
           infinite={true}
           autoPlay={false}
           autoPlaySpeed={0}
@@ -162,7 +184,7 @@ export default function SingleTVpage() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-white">Backdrops</h2>
+        <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">Backdrops</h2>
         <Carousel
           responsive={responsive}
           infinite={true}
@@ -188,9 +210,9 @@ export default function SingleTVpage() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-white">Posters</h2>
+        <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">Posters</h2>
         <Carousel
-          responsive={responsive}
+          responsive={responsive2}
           infinite={true}
           autoPlay={true}
           autoPlaySpeed={5000}

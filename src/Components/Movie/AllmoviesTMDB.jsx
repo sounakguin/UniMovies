@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import GenreFilter from "../Components/FilterMovie";
-import SearchMovies from "../Components/Searchbar";
+import GenreFilter from "../Movie/FilterMovie";
+import SearchMovies from "../Movie/Searchbar";
 
 const TMDB_API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
 
@@ -101,6 +101,7 @@ export default function AllmoviesTMDB() {
 
   return (
     <div className="">
+         <br />
       <SearchMovies onSearch={handleSearchResults} />
       <br />
       <br />
@@ -109,8 +110,9 @@ export default function AllmoviesTMDB() {
         selectedGenre={selectedGenre}
         handleGenreClick={handleGenreClick}
       />
+         <br />
       <div className="mx-auto w-3/4 mt-5">
-        <div className="flex flex-wrap justify-center md:justify-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {movies.map((movie, index) => (
             <Link
               to={`/movie/${movie.id}`}
