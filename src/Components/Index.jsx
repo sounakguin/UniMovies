@@ -1,14 +1,37 @@
-import React, { useState, useEffect, lazy } from "react";
+import React, { Component, lazy, Suspense, useState, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
 import Movielist from "../Components/HomePageData/Movielist";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import Footer from "../Components/Footer"
-import Streamingpartner from "./HomePageData/Streamingdata"; 
+import Footer from "../Components/Footer";
+import Streamingpartner from "./HomePageData/Streamingdata";
+
 const Contactus = lazy(() => import("./HomePageData/Contractus")); 
 
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("Error in lazy-loaded component:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong while loading the component.</h1>;
+    }
+
+    return this.props.children;
+  }
+}
 
 export default function Index() {
   const [fetchData, setFetchData] = useState([]);
@@ -42,13 +65,10 @@ export default function Index() {
       setIsMobile(window.innerWidth < 768); 
     };
 
-  
     handleResize();
 
-  
     window.addEventListener("resize", handleResize);
 
-    
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -110,14 +130,16 @@ export default function Index() {
         <div className="mx-auto">
           <Movielist />
         </div>
-        <p className="text-white  text-3xl pl-0 md:pl-4 pb-8 pt-8">Streaming Partners </p>
+        <p className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-8 pt-8">Streaming Partners</p>
         <Streamingpartner />
-        <p className="text-white  text-3xl pl-0 md:pl-4 pb-5 pt-8">Connect With Us</p>
-          <Contactus />
-         
-        <Footer/>
+        <p className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5 pt-8">Connect With Us</p>
+        <ErrorBoundary>
+          <Suspense fallback={<div>Loading Contact Us...</div>}>
+            <Contactus />
+          </Suspense>
+        </ErrorBoundary>
+        <Footer />
       </div>
-    
     </div>
   );
 }

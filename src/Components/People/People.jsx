@@ -17,11 +17,10 @@ export default function People() {
       }
       const data = await response.json();
 
-      // If it's a new search (page === 1), replace the previous results with new ones
       if (page === 1) {
         setPeople(data.results);
       } else {
-        // If it's pagination, append new results to the existing ones
+
         setPeople((prevPeople) => [...prevPeople, ...data.results]);
       }
     } catch (error) {
@@ -54,7 +53,7 @@ export default function People() {
   };
   
   return (
-    <div className="w-3/4 mx-auto">
+    <div className="md:w-3/4 mx-auto">
     <SearchbarPeople onSearch={handeldata} />
     
       <div className="flex flex-wrap justify-center mt-5">

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import SearchTVdata from "./SearchTVdata";
 import FilterTV from "./FilterTV";
-import { motion } from "framer-motion";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
 
@@ -34,7 +34,9 @@ const fetchTVShows = async (setTV, setIsLoading, category, genreId, page) => {
       throw new Error(`Failed to fetch TV shows: ${response.statusText}`);
     }
     const data = await response.json();
-    setTV((prevTV) => (page === 1 ? data.results : [...prevTV, ...data.results]));
+    setTV((prevTV) =>
+      page === 1 ? data.results : [...prevTV, ...data.results]
+    );
     setIsLoading(false);
   } catch (error) {
     console.error("Error fetching TV shows:", error);
@@ -100,20 +102,30 @@ export default function TV() {
     <div>
       <br />
       <SearchTVdata Searchdata={handleSearch} />
-      <br />
-      <br />
+      
       <FilterTV
         genres={tvGenres}
         selectedGenre={selectedGenre}
         handleGenreClick={handleGenreClick}
       />
-       <p className="text-orange-300 text-center text-3xl pt-6">Special Filter</p>
+      <div className="hidden md:block">
+      <p className="text-orange-300 text-center text-3xl pt-6">
+        Special Filter
+      </p>
       <div className="flex justify-center mt-5 w-3/4 mx-auto gap-4">
         <button
           onClick={() => handleCategoryChange("popular")}
           className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
-            ${selectedCategory === "popular" ? "bg-blue-500 text-white" : "bg-white text-black"}
-            ${selectedCategory === "popular" ? "border-none" : "border border-gray-300"}
+            ${
+              selectedCategory === "popular"
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }
+            ${
+              selectedCategory === "popular"
+                ? "border-none"
+                : "border border-gray-300"
+            }
           `}
           style={{
             borderRadius: "8px",
@@ -124,8 +136,16 @@ export default function TV() {
         <button
           onClick={() => handleCategoryChange("airing_today")}
           className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
-            ${selectedCategory === "airing_today" ? "bg-blue-500 text-white" : "bg-white text-black"}
-            ${selectedCategory === "airing_today" ? "border-none" : "border border-gray-300"}
+            ${
+              selectedCategory === "airing_today"
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }
+            ${
+              selectedCategory === "airing_today"
+                ? "border-none"
+                : "border border-gray-300"
+            }
           `}
           style={{
             borderRadius: "8px",
@@ -136,8 +156,16 @@ export default function TV() {
         <button
           onClick={() => handleCategoryChange("on_the_air")}
           className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
-            ${selectedCategory === "on_the_air" ? "bg-blue-500 text-white" : "bg-white text-black"}
-            ${selectedCategory === "on_the_air" ? "border-none" : "border border-gray-300"}
+            ${
+              selectedCategory === "on_the_air"
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }
+            ${
+              selectedCategory === "on_the_air"
+                ? "border-none"
+                : "border border-gray-300"
+            }
           `}
           style={{
             borderRadius: "8px",
@@ -148,8 +176,16 @@ export default function TV() {
         <button
           onClick={() => handleCategoryChange("top_rated")}
           className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
-            ${selectedCategory === "top_rated" ? "bg-blue-500 text-white" : "bg-white text-black"}
-            ${selectedCategory === "top_rated" ? "border-none" : "border border-gray-300"}
+            ${
+              selectedCategory === "top_rated"
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }
+            ${
+              selectedCategory === "top_rated"
+                ? "border-none"
+                : "border border-gray-300"
+            }
           `}
           style={{
             borderRadius: "8px",
@@ -158,10 +194,11 @@ export default function TV() {
           Top Rated
         </button>
       </div>
+      </div>
 
       <br />
-      <div className="mx-auto w-3/4 mt-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+      <div className="mx-auto md:w-3/4 mt-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {tv.map((tvShow) => (
             <Link
               to={`/tv/${tvShow.id}`}
@@ -170,11 +207,33 @@ export default function TV() {
               className="flex justify-center"
             >
               <div className="cards  mt-0 md:mt-4 lg:mt-5">
-                <img
-                  className="cards__img"
-                  src={`https://image.tmdb.org/t/p/original${tvShow.poster_path}`}
-                  alt={tvShow.original_name}
-                />
+                {tvShow.poster_path ? (
+                  <LazyLoadImage
+                    className="cards__img"
+                    src={`https://image.tmdb.org/t/p/original${tvShow.poster_path}`}
+                    alt={tvShow.original_name}
+                    effect="blur"
+                  />
+                ) : (
+                  <div
+                    className="fallback-image"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      backgroundColor: "white",
+                      color: "black",
+                      textAlign: "center",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    No image available
+                  </div>
+                )}
+
                 <div className="cards__overlay">
                   <div className="card__title">{tvShow.original_name}</div>
                   <div className="card__runtime">

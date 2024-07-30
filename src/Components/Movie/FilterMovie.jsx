@@ -6,7 +6,7 @@ const FilterMovie = ({ genres, selectedGenre, handleGenreClick }) => {
   }
 
   return (
-    <div className='hidden md:block'>
+    <div className='hidden md:block mt-0 md:mt-5'>
       <div className="flex justify-center item-center">
         {genres.slice(0, 9).map(genre => (
           <button

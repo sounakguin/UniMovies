@@ -25,7 +25,7 @@ const SingleMovieDetails = () => {
     superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 6 },
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 6 },
     tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
-    mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+    mobile: { breakpoint: { max: 464, min: 0 }, items: 2 },
   };
 
   const responsive2 = {
@@ -116,7 +116,7 @@ const SingleMovieDetails = () => {
     <div className="container mx-auto p-4">
       {credits && credits.length > 0 && (
         <div className="">
-          <h2 className="text-xl font-semibold text-white pl-0 md:pl-2">
+          <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 text-center md:text-left">
             Credits for this movie
           </h2>
           <Carousel
@@ -133,16 +133,16 @@ const SingleMovieDetails = () => {
           >
             {credits.map((credit) => (
               <Link to={`/person/${credit.id}`} key={credit.id}>
-                <div className="px-5 flex justify-center mt-5 flex-col">
+                <div className="px-5 flex justify-center items-center mt-5 flex-col ">
                   {credit.profile_path ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${credit.profile_path}`}
                       alt={credit.name}
-                      className="h-52 w-52 object-cover rounded-full mt-2"
+                      className="h-52 w-52 object-cover rounded-full mt-2 "
                     />
                   ) : (
                     <div className="h-52 w-52 flex items-center justify-center rounded-full bg-gray-200 mt-2">
-                      <span className="text-gray-500">{credit.name}</span>
+                      <span className="text-gray-500 pl-4 md:pl-0" >{credit.name}</span>
                     </div>
                   )}
                   <p className="text-white text-center pt-4 pb-5 ">
@@ -157,7 +157,7 @@ const SingleMovieDetails = () => {
 
       {videos && videos.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2">
+          <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2 text-center md:text-left">
             Watch Videos and Trailers
           </h2>
           <Carousel
@@ -190,7 +190,7 @@ const SingleMovieDetails = () => {
 
       {backdrops && backdrops.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2">
+          <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
             Backdrops
           </h2>
           <Carousel
@@ -220,7 +220,7 @@ const SingleMovieDetails = () => {
 
       {posters && posters.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2">
+          <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2 text-center md:text-left">
             Posters
           </h2>
           <Carousel
@@ -250,7 +250,7 @@ const SingleMovieDetails = () => {
 
       {similar && similar.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2">
+          <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2 text-center md:text-left">
             Similar Movies
           </h2>
           <Carousel
@@ -268,11 +268,32 @@ const SingleMovieDetails = () => {
             {similar.map((movie) => (
               <Link to={`/movie/${movie.id}`} key={movie.id}>
                 <div className="p-2">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt="Similar movies"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+                  {movie.poster_path ? (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                      alt="Similar movies"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div
+                      className="fallback-image"
+                      style={{
+                        width: "100%",
+                        height: "50vh",
+                        display: "flex",
+                        alignItems:"center",
+                        justifyContent: "center",
+                        backgroundColor: "white",
+                        color: "black",
+                        textAlign: "center",
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      No image available
+                    </div>
+                  )}
                 </div>
               </Link>
             ))}
@@ -282,7 +303,7 @@ const SingleMovieDetails = () => {
 
       {recomendation && recomendation.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2">
+          <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2 text-center md:text-left">
             Recommended Movies
           </h2>
           <Carousel
@@ -300,11 +321,31 @@ const SingleMovieDetails = () => {
             {recomendation.map((movie) => (
               <Link to={`/movie/${movie.id}`} key={movie.id}>
                 <div className="p-2">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt="Recommended movies"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+                  {movie.poster_path ? (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                      alt="Recommended movies"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div
+                      className="fallback-image"
+                      style={{
+                        width: "100%",
+                        height: "50vh",
+                        display: "flex",
+                        justifyContent: "center",
+                        backgroundColor: "white",
+                        color: "black",
+                        textAlign: "center",
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      No image available
+                    </div>
+                  )}
                 </div>
               </Link>
             ))}

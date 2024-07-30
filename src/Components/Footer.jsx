@@ -11,28 +11,28 @@ export default function Footer() {
 
         </div>
           <div className="flex flex-col items-center md:items-start">
-            <h2 className="text-2xl font-bold mb-2">MovieSite</h2>
-            <p className="text-sm text-gray-400">
+            <h2 className="text-2xl font-bold mb-2">UNIMOVIES</h2>
+            <p className="text-sm pt-1 text-center md:text-left text-gray-400">
               Your one-stop destination for all movie information, reviews, and trailers. 
              <p> Stay updated with the latest in the movie world.</p>
             </p>
           </div>
 
       
-          <div>
+          <div className='text-center md:text-left'>
             
-            <ul className="space-y-2">
+            <ul className="space-y-2 ">
             <p className="text-xl font-bold mb-4">Quick Links</p>
               <li><a href="#" className=" hover:text-yellow-400 ">Home</a></li>
               <li><a href="#" className="hover:text-yellow-400  ">Movies</a></li>
               <li><a href="#" className="hover:text-yellow-400 ">Person</a></li>
               <li><a href="#" className="hover:text-yellow-400 ">TV</a></li>
-              <li><a href="#" className="hover:text-yellow-400 ">Contact Us</a></li>
+            
             </ul>
           </div>
 
          
-          <div>
+          <div className='text-center md:text-left'>
             
             <ul className="space-y-2">
             <p className="text-xl font-bold mb-4">Contact Us</p>
@@ -42,8 +42,8 @@ export default function Footer() {
             </ul>
           </div>
          <div>
-         <p className='text-xl font-bold mb-4'>Social Links</p>
-          <div className="space-y-2 space-x-5">
+         <p className='text-xl font-bold mb-4 text-center md:text-left'>Social Links</p>
+          <div className="space-y-2 space-x-5 text-center md:text-left">
            
           <a href="https://www.linkedin.com/in/sounak-guin-6a7a84209/" className="text-gray-400 hover:text-white transition duration-300"><FontAwesomeIcon icon={faLinkedin} size="2x" /></a>
           <a href="https://github.com/sounakguin" className="text-gray-400 hover:text-white transition duration-300"><FontAwesomeIcon icon={faGithub} size="2x" /></a>

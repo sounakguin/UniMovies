@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import GenreFilter from "../Movie/FilterMovie";
 import SearchMovies from "../Movie/Searchbar";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const TMDB_API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
 
@@ -129,15 +130,13 @@ export default function AllmoviesTMDB() {
     <div className="">
       <br />
       <SearchMovies onSearch={handleSearchResults} />
-      <br />
-      <br />
       <GenreFilter
         genres={genres}
         selectedGenre={selectedGenre}
         handleGenreClick={handleGenreClick}
       />
-      <br />
-      <p className="text-orange-300 text-center text-3xl">Special Filter</p>
+      <div className="hidden md:block mt-0 md:mt-8">
+      <p className=" text-orange-300 text-center text-3xl">Special Filter</p>
       <div className="flex justify-center mt-5 w-3/4 mx-auto gap-4">
         <button
           onClick={() => handleCategoryChange("popular")}
@@ -214,10 +213,11 @@ export default function AllmoviesTMDB() {
           Now Playing
         </button>
       </div>
+      </div>
 
       <br />
-      <div className="mx-auto w-3/4 mt-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+      <div className="mx-auto  md:w-3/4 mt-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {movies.map((movie, index) => (
             <Link
               to={`/movie/${movie.id}`}
@@ -227,10 +227,11 @@ export default function AllmoviesTMDB() {
             >
               <div className="cards m-2">
                 {movie.poster_path ? (
-                  <img
+                  <LazyLoadImage
                     className="cards__img"
                     src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                     alt={movie.original_title}
+                    effect="blur"
                   />
                 ) : (
                   <div
@@ -239,7 +240,7 @@ export default function AllmoviesTMDB() {
                       width: "100%",
                       height: "100%",
                       display: "flex",
-                      alignItems: "center",
+                    
                       justifyContent: "center",
                       backgroundColor: "white",
                       color: "black",

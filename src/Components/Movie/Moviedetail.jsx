@@ -19,7 +19,7 @@ import {
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 
-const TMDB_API_KEY = "d00cb3e60d55a92130bdafb5ff634708"; 
+const TMDB_API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
 
 const Moviedetail = () => {
   const [currentMovieDetail, setMovieDetail] = useState(null);
@@ -98,31 +98,54 @@ const Moviedetail = () => {
     }
   };
 
+  const renderFallbackImage = (text) => (
+    <div
+      className="flex items-center justify-center w-full h-full"
+      style={{ backgroundColor: "white", height: "400px", position: "relative" }}
+    >
+      <span
+        style={{
+          color: "black",
+          fontSize: "24px",
+          fontWeight: "bold",
+          textAlign: "center",
+          position: "absolute",
+        }}
+      >
+        {text}
+      </span>
+    </div>
+  );
+
   return (
     <div className="movie">
       {currentMovieDetail && (
         <>
           <div className="movie__intro hidden md:block">
-            <img
-              className="movie__backdrop"
-              src={`https://image.tmdb.org/t/p/original${
-                currentMovieDetail.backdrop_path || ""
-              }`}
-              alt="Backdrop"
-            />
+            {currentMovieDetail.backdrop_path ? (
+              <img
+                className="movie__backdrop"
+                src={`https://image.tmdb.org/t/p/original${currentMovieDetail.backdrop_path}`}
+                alt="Backdrop"
+              />
+            ) : (
+              renderFallbackImage("Backdrop Not Available")
+            )}
           </div>
           <div className="movie__detail mb-0 pb-0 flex flex-col md:flex-row">
             <div className="flex flex-col movie__detailLeft relative">
               <div className="relative group">
                 <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
 
-                <img
-                  className="movie__poster object-cover w-full h-full transition-opacity duration-300"
-                  src={`https://image.tmdb.org/t/p/original${
-                    currentMovieDetail.poster_path || ""
-                  }`}
-                  alt="Poster"
-                />
+                {currentMovieDetail.poster_path ? (
+                  <img
+                    className="movie__poster object-cover w-full h-full transition-opacity duration-300"
+                    src={`https://image.tmdb.org/t/p/original${currentMovieDetail.poster_path}`}
+                    alt="Poster"
+                  />
+                ) : (
+                  ""
+                )}
                 <div
                   className={`absolute top-5 left-60 transform text-3xl h-10 w-10 cursor-pointer transition-opacity duration-300 opacity-0 group-hover:opacity-100 ${
                     isInList ? "text-red-500" : "text-gray-500"

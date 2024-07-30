@@ -257,11 +257,31 @@ export default function SingleTVpage() {
           >
             {posters.map((poster) => (
               <div key={poster.file_path} className="p-2">
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${poster.file_path}`}
-                  alt="Poster"
-                  className="w-full h-full object-cover rounded-lg"
-                />
+                {poster.file_path ? (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${poster.file_path}`}
+                    alt="Poster"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                ) : (
+                  <div
+                    className="fallback-image"
+                    style={{
+                      width: "100%",
+                      height: "50vh",
+                      display: "flex",
+                      justifyContent: "center",
+                      backgroundColor: "white",
+                      color: "black",
+                      textAlign: "center",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    No image available
+                  </div>
+                )}
               </div>
             ))}
           </Carousel>
@@ -288,11 +308,32 @@ export default function SingleTVpage() {
             {similar.map((tvShow) => (
               <Link to={`/tv/${tvShow.id}`}>
                 <div key={tvShow.id} className="p-2">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
-                    alt={tvShow.name}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+                  {tvShow.poster_path ? (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
+                      alt={tvShow.name}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div
+                      className="fallback-image"
+                      style={{
+                        width: "100%",
+                        height: "50vh",
+                        display: "flex",
+                        justifyContent: "center",
+                        backgroundColor: "white",
+                        color: "black",
+                        textAlign: "center",
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      No image available
+                    </div>
+                  )}
+
                   <p className="text-white  text-center pt-4">{tvShow.name}</p>
                 </div>
               </Link>
@@ -321,11 +362,32 @@ export default function SingleTVpage() {
             {recommendations.map((tvShow) => (
               <Link to={`/tv/${tvShow.id}`}>
                 <div key={tvShow.id} className="p-2">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
-                    alt={tvShow.name}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+                  {tvShow.poster_path ? (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
+                      alt={tvShow.name}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div
+                      className="fallback-image"
+                      style={{
+                        width: "100%",
+                        height: "50vh",
+                        display: "flex",
+                        justifyContent: "center",
+                        backgroundColor: "white",
+                        color: "black",
+                        textAlign: "center",
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      No image available
+                    </div>
+                  )}
+
                   <p className="text-white pt-4 text-center">{tvShow.name}</p>
                 </div>
               </Link>
