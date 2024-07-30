@@ -277,6 +277,46 @@ h3 {
 
 
 
+@keyframes scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.flex {
+  display: flex;
+}
+
+.gap-3 {
+  gap: 0.75rem; 
+}
+
+.animate-scroll {
+  display: flex;
+  width: calc(200% + 3rem);
+  animation: scroll 50s linear infinite;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+  width: 13rem; 
+}
+
+.h-36 {
+  height: 9rem; 
+}
+
+.w-52 {
+  width: 13rem; 
+}
+
 
 
 

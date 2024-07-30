@@ -6,8 +6,9 @@ import Movielist from "../Components/HomePageData/Movielist";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import Footer from "../Components/Footer"
+import Streamingpartner from "./HomePageData/Streamingdata"; 
+const Contactus = lazy(() => import("./HomePageData/Contractus")); 
 
-const Contactus = lazy(() => import("./HomePageData/Contractus"));
 
 export default function Index() {
   const [fetchData, setFetchData] = useState([]);
@@ -81,7 +82,7 @@ export default function Index() {
                 />
                 <div className="posterImage__overlay absolute bottom-0 left-0 right-0 text-white p-4 ">
                   <div className="posterImage__title ">
-                    <div className=" text-4xl w-auto  md:text-left md:text-7xl md:ml-12 ml-0">
+                    <div className=" text-4xl w-auto  md:text-left md:text-7xl  ml-0">
                       {movie.original_title}
                     </div>
                   </div>
@@ -109,10 +110,11 @@ export default function Index() {
         <div className="mx-auto">
           <Movielist />
         </div>
-   
-        <p className="text-white  text-3xl pl-0 md:pl-4 pb-5">Connect With Us</p>
+        <p className="text-white  text-3xl pl-0 md:pl-4 pb-8 pt-8">Streaming Partners </p>
+        <Streamingpartner />
+        <p className="text-white  text-3xl pl-0 md:pl-4 pb-5 pt-8">Connect With Us</p>
           <Contactus />
-        
+         
         <Footer/>
       </div>
     

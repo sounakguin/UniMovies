@@ -141,6 +141,10 @@ const MovieList = () => {
           ))}
         </Carousel>
       </section>
+      <div className="pt-0">
+        <p className="text-white  text-3xl pl-0 md:pl-4 pb-5">Exclusively on Hotstar</p>
+        <img src="Images/banner.webp" className="opacity-90"/>
+      </div>
     </div>
   );
 };

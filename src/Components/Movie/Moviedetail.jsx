@@ -19,7 +19,7 @@ import {
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 
-const TMDB_API_KEY = "d00cb3e60d55a92130bdafb5ff634708"; // Your TMDB API key
+const TMDB_API_KEY = "d00cb3e60d55a92130bdafb5ff634708"; 
 
 const Moviedetail = () => {
   const [currentMovieDetail, setMovieDetail] = useState(null);
@@ -53,7 +53,7 @@ const Moviedetail = () => {
         if (user) {
           const docRef = doc(db, "Users", user.uid);
           const docSnap = await getDoc(docRef);
-          if (docSnap.exists() && docSnap.data().myList.includes(id)) {
+          if (docSnap.exists() && docSnap.data().myMovieList.includes(id)) {
             setIsInList(true);
           } else {
             setIsInList(false);
@@ -75,17 +75,17 @@ const Moviedetail = () => {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const newList = isInList ? arrayRemove(id) : arrayUnion(id);
-          await updateDoc(docRef, { myList: newList });
+          await updateDoc(docRef, { myMovieList: newList });
 
           // Update local storage
-          const myList = JSON.parse(localStorage.getItem("myList")) || [];
+          const myMovieList = JSON.parse(localStorage.getItem("myMovieList")) || [];
           if (isInList) {
             localStorage.setItem(
-              "myList",
-              JSON.stringify(myList.filter((item) => item !== id))
+              "myMovieList",
+              JSON.stringify(myMovieList.filter((item) => item !== id))
             );
           } else {
-            localStorage.setItem("myList", JSON.stringify([...myList, id]));
+            localStorage.setItem("myMovieList", JSON.stringify([...myMovieList, id]));
           }
 
           setIsInList(!isInList); // Update the state after modifying the list
