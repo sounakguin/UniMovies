@@ -13,7 +13,7 @@ export default function AllmoviesTMDB() {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const observer = useRef();
-  const initialLimit = 30;
+  const today = new Date().toISOString().split("T")[0];
 
   // Fetch genres from TMDB API
   const fetchGenres = async () => {
@@ -47,11 +47,28 @@ export default function AllmoviesTMDB() {
         throw new Error(`Failed to fetch movies: ${response.statusText}`);
       }
       const data = await response.json();
-      if (page === 1) {
-        setMovies(data.results); // Set initial movies or search results
-      } else {
-        setMovies((prevMovies) => [...prevMovies, ...data.results]); // Append more movies
-      }
+      const filteredMovies = data.results.filter(
+        (movie) => category !== "upcoming" || movie.release_date >= today
+      );
+
+      // Remove duplicates based on poster_path
+      const removeDuplicatesByPath = (array) => {
+        const seen = new Set();
+        return array.filter((item) => {
+          const path = item.poster_path;
+          if (seen.has(path)) {
+            return false;
+          }
+          seen.add(path);
+          return true;
+        });
+      };
+
+      const uniqueMovies = removeDuplicatesByPath(
+        page === 1 ? filteredMovies : [...movies, ...filteredMovies]
+      );
+
+      setMovies(uniqueMovies);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching movies:", error);
@@ -61,7 +78,8 @@ export default function AllmoviesTMDB() {
 
   // Handle search results from SearchMovies component
   const handleSearchResults = (data) => {
-    setMovies(data); // Update movies with search results
+  
+    setMovies(data); 
   };
 
   // Handle genre button click
@@ -70,6 +88,14 @@ export default function AllmoviesTMDB() {
     setMovies([]);
     setPage(1);
     fetchMovies(category, 1, genreId);
+  };
+
+  // Handle category change
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+    setMovies([]);
+    setPage(1);
+    fetchMovies(newCategory, 1, selectedGenre);
   };
 
   // Load more movies when scrolled to the end
@@ -101,7 +127,7 @@ export default function AllmoviesTMDB() {
 
   return (
     <div className="">
-         <br />
+      <br />
       <SearchMovies onSearch={handleSearchResults} />
       <br />
       <br />
@@ -110,7 +136,86 @@ export default function AllmoviesTMDB() {
         selectedGenre={selectedGenre}
         handleGenreClick={handleGenreClick}
       />
-         <br />
+      <br />
+      <p className="text-orange-300 text-center text-3xl">Special Filter</p>
+      <div className="flex justify-center mt-5 w-3/4 mx-auto gap-4">
+        <button
+          onClick={() => handleCategoryChange("popular")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            ${
+              category === "popular"
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }
+            ${category === "popular" ? "border-none" : "border border-gray-300"}
+          `}
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Popular
+        </button>
+        <button
+          onClick={() => handleCategoryChange("top_rated")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            ${
+              category === "top_rated"
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }
+            ${
+              category === "top_rated"
+                ? "border-none"
+                : "border border-gray-300"
+            }
+          `}
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Top Rated
+        </button>
+        <button
+          onClick={() => handleCategoryChange("upcoming")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            ${
+              category === "upcoming"
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }
+            ${
+              category === "upcoming" ? "border-none" : "border border-gray-300"
+            }
+          `}
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Upcoming
+        </button>
+        <button
+          onClick={() => handleCategoryChange("now_playing")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            ${
+              category === "now_playing"
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }
+            ${
+              category === "now_playing"
+                ? "border-none"
+                : "border border-gray-300"
+            }
+          `}
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Now Playing
+        </button>
+      </div>
+
+      <br />
       <div className="mx-auto w-3/4 mt-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {movies.map((movie, index) => (
@@ -121,11 +226,32 @@ export default function AllmoviesTMDB() {
               ref={index === movies.length - 1 ? lastMovieElementRef : null}
             >
               <div className="cards m-2">
-                <img
-                  className="cards__img"
-                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                  alt={movie.original_title}
-                />
+                {movie.poster_path ? (
+                  <img
+                    className="cards__img"
+                    src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                    alt={movie.original_title}
+                  />
+                ) : (
+                  <div
+                    className="fallback-image"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "white",
+                      color: "black",
+                      textAlign: "center",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    No image available
+                  </div>
+                )}
                 <div className="cards__overlay">
                   <div className="card__title">{movie.original_title}</div>
                   <div className="card__runtime">

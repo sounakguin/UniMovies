@@ -153,7 +153,7 @@ export default function SingleTVpage() {
           >
             {credits.map((credit) => (
               <Link key={credit.id} to={`/person/${credit.id}`}>
-                <div className="px-2 flex justify-center mt-5">
+                <div className="px-5 flex justify-center mt-5 flex-col">
                   {credit.profile_path ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${credit.profile_path}`}
@@ -165,6 +165,9 @@ export default function SingleTVpage() {
                       <span className="text-gray-500">{credit.name}</span>
                     </div>
                   )}
+                  <p className="text-white text-center pt-4  pb-5">
+                    {credit.name}
+                  </p>
                 </div>
               </Link>
             ))}
@@ -172,7 +175,7 @@ export default function SingleTVpage() {
         </div>
       )}
 
-      {videos && videos.length  > 0 && (
+      {videos && videos.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4 mt-5 pl-0 md:pl-4 text-white">
             Watch Videos and Trailers
@@ -205,8 +208,7 @@ export default function SingleTVpage() {
         </div>
       )}
 
-      {backdrops && (backdrops.length  > 0) &&
-      (
+      {backdrops && backdrops.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
             Backdrops
@@ -236,100 +238,100 @@ export default function SingleTVpage() {
         </div>
       )}
 
-      {posters &&
-        (posters.length  > 0) &&
-        (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
-              Posters
-            </h2>
-            <Carousel
-              responsive={responsive2}
-              infinite={true}
-              autoPlay={true}
-              autoPlaySpeed={5000}
-              keyBoardControl={true}
-              transitionDuration={1000}
-              arrows={true}
-              showDots={false}
-              containerClass="carousel-container"
-              itemClass="carousel-item"
-            >
-              {posters.map((poster) => (
-                <div key={poster.file_path} className="p-2">
+      {posters && posters.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
+            Posters
+          </h2>
+          <Carousel
+            responsive={responsive2}
+            infinite={true}
+            autoPlay={true}
+            autoPlaySpeed={5000}
+            keyBoardControl={true}
+            transitionDuration={1000}
+            arrows={true}
+            showDots={false}
+            containerClass="carousel-container"
+            itemClass="carousel-item"
+          >
+            {posters.map((poster) => (
+              <div key={poster.file_path} className="p-2">
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${poster.file_path}`}
+                  alt="Poster"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+            ))}
+          </Carousel>
+        </div>
+      )}
+
+      {similar && similar.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
+            Similar TV Shows
+          </h2>
+          <Carousel
+            responsive={responsive2}
+            infinite={true}
+            autoPlay={true}
+            autoPlaySpeed={5000}
+            keyBoardControl={true}
+            transitionDuration={1000}
+            arrows={true}
+            showDots={false}
+            containerClass="carousel-container"
+            itemClass="carousel-item"
+          >
+            {similar.map((tvShow) => (
+              <Link to={`/tv/${tvShow.id}`}>
+                <div key={tvShow.id} className="p-2">
                   <img
-                    src={`https://image.tmdb.org/t/p/w500${poster.file_path}`}
-                    alt="Poster"
+                    src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
+                    alt={tvShow.name}
                     className="w-full h-full object-cover rounded-lg"
                   />
+                  <p className="text-white  text-center pt-4">{tvShow.name}</p>
                 </div>
-              ))}
-            </Carousel>
-          </div>
-        )}
+              </Link>
+            ))}
+          </Carousel>
+        </div>
+      )}
 
-      {
-        similar && similar.length  > 0 && (
-          <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
-          Similar TV Shows
-        </h2>
-        <Carousel
-          responsive={responsive2}
-          infinite={true}
-          autoPlay={true}
-          autoPlaySpeed={5000}
-          keyBoardControl={true}
-          transitionDuration={1000}
-          arrows={true}
-          showDots={false}
-          containerClass="carousel-container"
-          itemClass="carousel-item"
-        >
-          {similar.map((tvShow) => (
-            <div key={tvShow.id} className="p-2">
-              <img
-                src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
-                alt={tvShow.name}
-                className="w-full h-full object-cover rounded-lg"
-              />
-              <p className="text-white  text-center pt-4">{tvShow.name}</p>
-            </div>
-          ))}
-        </Carousel>
-      </div>
-        )
-      }
-
-      {recommendations && recommendations.length>0 && (
+      {recommendations && recommendations.length > 0 && (
         <div className="">
-        <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
-          Recommended TV Shows
-        </h2>
-        <Carousel
-          responsive={responsive2}
-          infinite={true}
-          autoPlay={true}
-          autoPlaySpeed={5000}
-          keyBoardControl={true}
-          transitionDuration={1000}
-          arrows={true}
-          showDots={false}
-          containerClass="carousel-container"
-          itemClass="carousel-item"
-        >
-          {recommendations.map((tvShow) => (
-            <div key={tvShow.id} className="p-2">
-              <img
-                src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
-                alt={tvShow.name}
-                className="w-full h-full object-cover rounded-lg"
-              />
-              <p className="text-white pt-4 text-center">{tvShow.name}</p>
-            </div>
-          ))}
-        </Carousel>
-      </div>
+          <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
+            Recommended TV Shows
+          </h2>
+          <Carousel
+            responsive={responsive2}
+            infinite={true}
+            autoPlay={true}
+            autoPlaySpeed={5000}
+            keyBoardControl={true}
+            transitionDuration={1000}
+            arrows={true}
+            showDots={false}
+            containerClass="carousel-container"
+            itemClass="carousel-item"
+          >
+            {recommendations.map((tvShow) => (
+              <Link to={`/tv/${tvShow.id}`}>
+                <div key={tvShow.id} className="p-2">
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
+                    alt={tvShow.name}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <p className="text-white pt-4 text-center">{tvShow.name}</p>
+                </div>
+              </Link>
+            ))}
+          </Carousel>
+        </div>
       )}
     </div>
   );

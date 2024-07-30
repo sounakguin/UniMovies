@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import SearchTVdata from "./SearchTVdata";
 import FilterTV from "./FilterTV";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 
 const API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
 
@@ -22,13 +22,13 @@ const fetchTVGenres = async (setTVGenres) => {
   }
 };
 
-// Fetch TV shows based on genre and page
-const fetchTVShows = async (setTV, setIsLoading, genreId, page) => {
+// Fetch TV shows based on category, genre, and page
+const fetchTVShows = async (setTV, setIsLoading, category, genreId, page) => {
   try {
     setIsLoading(true);
     const url = genreId
       ? `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=${page}&with_genres=${genreId}`
-      : `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=${page}`;
+      : `https://api.themoviedb.org/3/tv/${category}?api_key=${API_KEY}&language=en-US&page=${page}`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch TV shows: ${response.statusText}`);
@@ -47,6 +47,7 @@ export default function TV() {
   const [page, setPage] = useState(1);
   const [tvGenres, setTVGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("popular");
   const [isLoading, setIsLoading] = useState(false);
   const initialFetch = useRef(true);
 
@@ -56,12 +57,12 @@ export default function TV() {
 
   useEffect(() => {
     if (initialFetch.current) {
-      fetchTVShows(setTV, setIsLoading, null, page);
+      fetchTVShows(setTV, setIsLoading, selectedCategory, selectedGenre, page);
       initialFetch.current = false;
     } else {
-      fetchTVShows(setTV, setIsLoading, selectedGenre, page);
+      fetchTVShows(setTV, setIsLoading, selectedCategory, selectedGenre, page);
     }
-  }, [page, selectedGenre]);
+  }, [page, selectedGenre, selectedCategory]);
 
   const handleScroll = () => {
     if (
@@ -89,9 +90,15 @@ export default function TV() {
     setPage(1);
   };
 
+  const handleCategoryChange = (newCategory) => {
+    setSelectedCategory(newCategory);
+    setTV([]);
+    setPage(1);
+  };
+
   return (
     <div>
-         <br />
+      <br />
       <SearchTVdata Searchdata={handleSearch} />
       <br />
       <br />
@@ -100,7 +107,60 @@ export default function TV() {
         selectedGenre={selectedGenre}
         handleGenreClick={handleGenreClick}
       />
-      <div className="container mx-auto w-3/4 mt-5">
+       <p className="text-orange-300 text-center text-3xl pt-6">Special Filter</p>
+      <div className="flex justify-center mt-5 w-3/4 mx-auto gap-4">
+        <button
+          onClick={() => handleCategoryChange("popular")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            ${selectedCategory === "popular" ? "bg-blue-500 text-white" : "bg-white text-black"}
+            ${selectedCategory === "popular" ? "border-none" : "border border-gray-300"}
+          `}
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Popular
+        </button>
+        <button
+          onClick={() => handleCategoryChange("airing_today")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            ${selectedCategory === "airing_today" ? "bg-blue-500 text-white" : "bg-white text-black"}
+            ${selectedCategory === "airing_today" ? "border-none" : "border border-gray-300"}
+          `}
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Airing Today
+        </button>
+        <button
+          onClick={() => handleCategoryChange("on_the_air")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            ${selectedCategory === "on_the_air" ? "bg-blue-500 text-white" : "bg-white text-black"}
+            ${selectedCategory === "on_the_air" ? "border-none" : "border border-gray-300"}
+          `}
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          On TV
+        </button>
+        <button
+          onClick={() => handleCategoryChange("top_rated")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            ${selectedCategory === "top_rated" ? "bg-blue-500 text-white" : "bg-white text-black"}
+            ${selectedCategory === "top_rated" ? "border-none" : "border border-gray-300"}
+          `}
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Top Rated
+        </button>
+      </div>
+
+      <br />
+      <div className="mx-auto w-3/4 mt-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {tv.map((tvShow) => (
             <Link

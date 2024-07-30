@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPopularTvShows,
   fetchTopRatedMovies,
+  fetchPopularMovies,
+  fetchUpcomingMovies,
 } from "../../Allmovies/AllmovieSlice";
 import "react-multi-carousel/lib/styles.css";
 import Carousel from "react-multi-carousel";
@@ -28,35 +30,52 @@ const responsive = {
   },
 };
 
+// Utility function to remove duplicates based on poster_path
+const removeDuplicatesByPath = (array) => {
+  const seen = new Set();
+  return array.filter((item) => {
+    const path = item.poster_path;
+    if (seen.has(path)) {
+      return false;
+    }
+    seen.add(path);
+    return true;
+  });
+};
+
 const MovieList = () => {
   const dispatch = useDispatch();
-  const { popularTvShows, topRatedMovies, status, error } = useSelector(
-    (state) => state.tmdb
-  ); // <-- Corrected state key name
+  const {
+    popularTvShows,
+    topRatedMovies,
+    upcomingMovies,
+    popularMovies,
+    status,
+    error,
+  } = useSelector((state) => state.tmdb);
 
   useEffect(() => {
-    // Fetch popular and top rated movies on component mount
     dispatch(fetchTopRatedMovies());
     dispatch(fetchPopularTvShows());
+    dispatch(fetchPopularMovies());
+    dispatch(fetchUpcomingMovies());
   }, [dispatch]);
 
-  // Handle loading state
   if (status === "loading") {
     return <div>Loading...</div>;
   }
 
-  // Handle error state
   if (status === "failed") {
     return <div>Error: {error}</div>;
   }
 
+  // Remove duplicates from upcomingMovies based on poster_path
+  const uniqueUpcomingMovies = removeDuplicatesByPath(upcomingMovies);
+
   return (
     <div>
       <section className="movie-section">
-        <h2 className="text-white text-3xl pl-0 md:pl-4 pb-5">
-          Popular Tv Shows
-        </h2>
-
+        <h2 className="text-white text-3xl pl-0 md:pl-4 pb-5">Popular TV Shows</h2>
         <Carousel
           responsive={responsive}
           infinite={true}
@@ -69,11 +88,7 @@ const MovieList = () => {
         >
           {popularTvShows.map((movie) => (
             <div key={movie.id} className="movie-item">
-              <Link
-                to={`/tv/${movie.id}`}
-                style={{ textDecoration: "none", color: "white" }}
-                key={movie.id}
-              >
+              <Link to={`/tv/${movie.id}`} style={{ textDecoration: "none", color: "white" }}>
                 <img
                   src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                   alt={movie.title}
@@ -81,10 +96,7 @@ const MovieList = () => {
                 />
                 <div className="cards__overlay">
                   <div className="card__title">{movie.original_name}</div>
-                  <div className="card__runtime">
-                    {movie.first_air_date}
-                    
-                  </div>
+                  <div className="card__runtime">{movie.first_air_date}</div>
                   <div className="card__description">
                     {movie.overview.slice(0, 115) + "..."}
                   </div>
@@ -94,16 +106,9 @@ const MovieList = () => {
           ))}
         </Carousel>
       </section>
-      <h2 className="text-white text-3xl pl-0 md:pl-4 pb-5">
-        Latest Movie Tailers
-      </h2>
-
-      <LatestMovieTrailers />
 
       <section className="movie-section">
-        <h2 className="text-white text-3xl pl-0 md:pl-4 pb-5">
-          Popular Movies
-        </h2>
+        <h2 className="text-white text-3xl pl-0 md:pl-4 pb-5">Top-Rated Movies</h2>
         <Carousel
           responsive={responsive}
           infinite={true}
@@ -116,22 +121,15 @@ const MovieList = () => {
         >
           {topRatedMovies.map((movie) => (
             <div key={movie.id} className="movie-item">
-              <Link
-                to={`/movie/${movie.id}`}
-                style={{ textDecoration: "none", color: "white" }}
-                key={movie.id}
-              >
+              <Link to={`/movie/${movie.id}`} style={{ textDecoration: "none", color: "white" }}>
                 <img
                   src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                   alt={movie.title}
                   className="cards__img"
                 />
-                 <div className="cards__overlay">
+                <div className="cards__overlay">
                   <div className="card__title">{movie.original_title}</div>
-                  <div className="card__runtime">
-                    {movie.release_date}
-                   
-                  </div>
+                  <div className="card__runtime">{movie.release_date}</div>
                   <div className="card__description">
                     {movie.overview.slice(0, 115) + "..."}
                   </div>
@@ -141,10 +139,82 @@ const MovieList = () => {
           ))}
         </Carousel>
       </section>
+
+      <h2 className="text-white text-3xl pl-0 md:pl-4 pb-5">Latest Movie Trailers</h2>
+      <LatestMovieTrailers />
+
+      <section className="movie-section">
+        <h2 className="text-white text-3xl pl-0 md:pl-4 pb-5">Popular Movies</h2>
+        <Carousel
+          responsive={responsive}
+          infinite={true}
+          autoPlay={true}
+          autoPlaySpeed={5000}
+          keyBoardControl={true}
+          transitionDuration={1000}
+          arrows={true}
+          showDots={false}
+        >
+          {popularMovies.map((movie) => (
+            <div key={movie.id} className="movie-item">
+              <Link to={`/movie/${movie.id}`} style={{ textDecoration: "none", color: "white" }}>
+                <img
+                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                  alt={movie.title}
+                  className="cards__img"
+                />
+                <div className="cards__overlay">
+                  <div className="card__title">{movie.original_title}</div>
+                  <div className="card__runtime">{movie.release_date}</div>
+                  <div className="card__description">
+                    {movie.overview.slice(0, 115) + "..."}
+                  </div>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </Carousel>
+      </section>
+
       <div className="pt-0">
-        <p className="text-white  text-3xl pl-0 md:pl-4 pb-5">Exclusively on Hotstar</p>
-        <img src="Images/banner.webp" className="opacity-90"/>
+        <p className="text-white text-3xl pl-0 md:pl-4 pb-5">Exclusively on Hotstar</p>
+        <a href="https://www.hotstar.com/in/home?ref=%2Fin" target="_blank" rel="noopener noreferrer">
+          <img src="Images/banner.webp" className="opacity-90" alt="Hotstar Banner" />
+        </a>
       </div>
+
+      <section className="movie-section">
+        <h2 className="text-white text-3xl pl-0 md:pl-4 pb-5">Upcoming Movies</h2>
+        <Carousel
+          responsive={responsive}
+          infinite={true}
+          autoPlay={true}
+          autoPlaySpeed={5000}
+          keyBoardControl={true}
+          transitionDuration={1000}
+          arrows={true}
+          showDots={false}
+        >
+          {uniqueUpcomingMovies.map((movie) => (
+            <div key={movie.id} className="movie-item">
+              <Link to={`/movie/${movie.id}`} style={{ textDecoration: "none", color: "white" }}>
+                <img
+                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                  alt={movie.title}
+                  className="cards__img"
+                />
+                <div className="cards__overlay">
+                  <div className="card__title">{movie.original_title}</div>
+                  <div className="card__runtime">{movie.release_date}</div>
+                  <div className="card__description">
+                    {movie.overview.slice(0, 115) + "..."}
+                  </div>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </Carousel>
+      </section>
     </div>
   );
 };
