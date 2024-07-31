@@ -13,7 +13,104 @@ body,
   background-color: black;
 }
 
+.movie-card {
+  display: inline-block;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0.5rem;
+  cursor: pointer;
+  min-width: 200px;
+  height: 300px;
+  z-index: 0;
+  border: 1px solid rgb(99, 99, 99);
+}
 
+.movie-card:hover {
+  transform: scale(1.12);
+  z-index: 1000;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+/* Ensure hover effect is only applied on larger screens */
+@media (max-width: 1024px) {
+  .movie-card:hover {
+    transform: none;
+    z-index: 0;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .movie-card {
+    min-width: 160px;
+    height: 240px;
+  }
+
+  .movie-img {
+    height: 240px;
+  }
+}
+
+@media (max-width: 640px) {
+  .movie-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .movie-card {
+    min-width: 45%; /* Adjust to fit two cards in one row */
+    height: 210px;
+    margin: 0.25rem; /* Reduce space between cards */
+  }
+
+  .movie-img {
+    height: 210px;
+  }
+}
+
+.overlay {
+  position: absolute;
+  padding: 0 1rem 1rem 1rem;
+  bottom: 0px;
+  height: 290px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-end;
+  background-image: linear-gradient(rgb(0, 0, 0, 0), rgb(0, 0, 0, 1));
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.overlay:hover {
+  opacity: 1;
+}
+
+.title {
+  font-weight: 900;
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.runtime {
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.rating {
+  float: right;
+}
+
+.description {
+  font-style: italic;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
 
 /* Custom CSS */
 .posterImage {
@@ -31,6 +128,7 @@ body,
   display: block;
   width: 100%;
 }
+
 
 
 .posterImage__overlay {
@@ -76,6 +174,30 @@ body,
   text-align: left;
   width: 50%;
 }
+
+
+@media (max-width: 640px) {
+  .posterImage__overlay {
+    padding: 1rem; /* Reduce padding for smaller screens */
+    height: auto; /* Adjust height to fit content */
+    bottom: 0px; /* Reset bottom positioning */
+    justify-content: left;
+    align-items: start;
+
+  }
+
+  .posterImage__title {
+    font-size: 1.5rem; /* Adjust font size for mobile */
+  }
+
+  .posterImage__runtime {
+ 
+    text-align: left;
+  }
+
+  
+}
+
 
 .Animatedcards {
   display: inline-block;
@@ -213,7 +335,6 @@ body,
   margin-bottom: 0.5rem;
 }
 
-
 .movie__voteCount {
   margin-left: 1rem;
 }
@@ -230,12 +351,8 @@ body,
   font-weight: 600;
   display: flex;
   align-items: center;
-margin-top: 0px;
+  margin-top: 0px;
 }
-
-
-
-
 
 .login {
   background-image: url(../Images/ok.jpg);
@@ -247,14 +364,9 @@ margin-top: 0px;
   min-height: 100vh;
 }
 
-
 .movie-section {
   margin: 20px 0;
 }
-
-
-
-
 
 .movie-list {
   display: flex;
@@ -270,14 +382,10 @@ margin-top: 0px;
   margin: 10px;
 }
 
-
-
 h3 {
   text-align: center;
   margin-top: 10px;
 }
-
-
 
 @keyframes scroll {
   0% {
@@ -297,7 +405,7 @@ h3 {
 }
 
 .gap-3 {
-  gap: 0.75rem; 
+  gap: 0.75rem;
 }
 
 .animate-scroll {
@@ -308,14 +416,13 @@ h3 {
 
 .flex-shrink-0 {
   flex-shrink: 0;
-  width: 13rem; 
+  width: 13rem;
 }
 
 .h-36 {
-  height: 9rem; 
+  height: 9rem;
 }
 
 .w-52 {
-  width: 13rem; 
+  width: 13rem;
 }
-

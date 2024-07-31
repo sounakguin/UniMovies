@@ -104,7 +104,7 @@ export default function TV() {
     <div>
       <br />
       <SearchTVdata Searchdata={handleSearch} />
-      
+      <br/>
       <FilterTV
         genres={tvGenres}
         selectedGenre={selectedGenre}
@@ -199,26 +199,26 @@ export default function TV() {
       </div>
 
       <br />
-      <div className="mx-auto md:w-3/4 mt-5">
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+      <div className="container mx-auto md:w-3/4 mt-5">
+        <div className="movie-grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {tv.map((tvShow) => (
             <Link
               to={`/tv/${tvShow.id}`}
               style={{ textDecoration: "none", color: "white" }}
               key={tvShow.id}
-              className="flex justify-center"
+              
             >
-              <div className="cards  mt-0 md:mt-4 lg:mt-5">
+              <div className="movie-card m-2">
                 {tvShow.poster_path ? (
                   <LazyLoadImage
-                    className="cards__img"
+                    className="movie-img"
                     src={`https://image.tmdb.org/t/p/original${tvShow.poster_path}`}
                     alt={tvShow.original_name}
                     effect="blur"
                   />
                 ) : (
                   <div
-                    className="fallback-image"
+                    className="fallback-img"
                     style={{
                       width: "100%",
                       height: "100%",
@@ -236,11 +236,11 @@ export default function TV() {
                   </div>
                 )}
 
-                <div className="cards__overlay">
-                  <div className="card__title">{tvShow.original_name}</div>
-                  <div className="card__runtime">
+                <div className="overlay">
+                  <div className="title">{tvShow.original_name}</div>
+                  <div className="runtime">
                     {tvShow.first_air_date}
-                    <span className="card__rating">
+                    <span className="rating">
                     <FontAwesomeIcon
                         className="text-yellow-400 pr-1"
                         icon={faStar}
@@ -249,7 +249,7 @@ export default function TV() {
               
                     </span>
                   </div>
-                  <div className="card__description">
+                  <div className="description">
                     {tvShow.overview.slice(0, 115) + "..."}
                   </div>
                 </div>

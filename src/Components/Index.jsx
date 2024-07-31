@@ -3,8 +3,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
 import Movielist from "../Components/HomePageData/Movielist";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import Footer from "../Components/Footer";
 import Streamingpartner from "./HomePageData/Streamingdata";
 
@@ -57,8 +57,8 @@ export default function Index() {
         <Carousel
           showThumbs={false}
           autoPlay={true}
-          transitionTime={2000}
-          interval={5000}
+          transitionTime={5000}
+          interval={10000}
           infiniteLoop={true}
           showStatus={false}
           showIndicators={false}
@@ -66,50 +66,70 @@ export default function Index() {
           showDots={false}
         >
           {fetchData.map((movie) => (
-            <Link
-              key={movie.id}
-              className="text-white no-underline"
-              to={`/movie/${movie.id}`}
-            >
-              <div className="posterImage relative">
-                <img
-                  src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                  alt={movie.original_title}
-                  className="w-full h-auto"
-                />
-                <div className="posterImage__overlay absolute bottom-0 left-0 right-0 text-white p-4">
-                  <div className="posterImage__title">
-                    <div className="text-4xl w-auto md:text-left md:text-7xl ml-0">
-                      {movie.original_title}
-                    </div>
+            <div className="posterImage relative">
+              <img
+                src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                alt={movie.original_title}
+                className="w-full h-auto"
+              />
+          
+              <div className=" posterImage__overlay absolute bottom-0 left-0 right-0 text-white p-4 ">
+                <div className="posterImage__title">
+                  <div className="text-xl w-auto  md:text-left md:text-7xl ml-0 ">
+                    {movie.original_title}
                   </div>
-                  <div className="posterImage__runtime flex mt-2 justify-between items-center">
-                    <div className="text-lg md:text-3xl text-center md:text-left">
-                      {movie.release_date}
-                    </div>
-                    <span className="posterImage__rating text-lg md:text-3xl text-center md:text-left">
-                      <FontAwesomeIcon className="text-yellow-400" icon={faStar} />{" "}
-                      {movie.vote_average}
-                    </span>
-                  </div>
-                  {!isMobile &&
-                    <div className="posterImage__description mt-2">
-                      <div className="hidden md:block">
-                        {movie.overview}
-                      </div>
-                    </div>
-                  }
                 </div>
+                <div className="posterImage__runtime flex mt-2 justify-between items-center">
+                  <div className="text-sm md:text-3xl text-center md:text-left">
+                    {movie.release_date}
+                  </div>
+                  <span className="posterImage__rating text-lg md:text-3xl text-center md:text-left">
+                    <FontAwesomeIcon
+                      className="text-yellow-400"
+                      icon={faStar}
+                    />{" "}
+                    {movie.vote_average}
+                  </span>
+                </div>
+                <div className="pb-2">
+                  <Link
+                    key={movie.id}
+                    className="text-white no-underline"
+                    to={`/movie/${movie.id}`}
+                  >
+                    <button
+                      className="relative px-6 
+                  py-2 rounded-lg font-semibold text-white bg-neutral-300 border-2 
+                  border-transparent overflow-hidden group"
+                    >
+                      <span className="relative z-10 text-black">Details</span>
+                      <span
+                        className="absolute inset-0 border-2 
+                    border-transparent bg-white text-black transition-transform 
+                    transform scale-x-0 group-hover:scale-x-100 origin-left"
+                      ></span>
+                    </button>
+                  </Link>
+                </div>
+                {!isMobile && (
+                  <div className="posterImage__description mt-2">
+                    <div className="hidden md:block">{movie.overview}</div>
+                  </div>
+                )}
               </div>
-            </Link>
+            </div>
           ))}
         </Carousel>
         <div className="mx-auto">
           <Movielist />
         </div>
-        <p className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-8 pt-8">Streaming Partners</p>
+        <p className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-8 pt-8">
+          Streaming Partners
+        </p>
         <Streamingpartner />
-        <p className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5 pt-8">Connect With Us</p>
+        <p className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5 pt-8">
+          Connect With Us
+        </p>
         <Suspense fallback={<div>Loading Contact Us...</div>}>
           <Contactus />
         </Suspense>
