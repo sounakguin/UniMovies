@@ -119,7 +119,7 @@ export default function TVDetails() {
                     alt="Poster"
                   />
                   <div
-                    className={`absolute top-5 left-60 transform text-3xl h-10 w-10 cursor-pointer transition-opacity duration-300 opacity-0 group-hover:opacity-100 ${
+                    className={`absolute top-5 left-52 md:top-5 md:left-60 transform text-3xl h-10 w-10 cursor-pointer transition-opacity duration-300 opacity-0 group-hover:opacity-100 ${
                       isInList ? "text-red-500" : "text-gray-500"
                     }`}
                     onClick={handleMyListClick}

@@ -193,11 +193,11 @@ function Register() {
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute inset-y-0 right-0 flex items-center pr-3"
+            className="absolute inset-y-0 right-0 flex items-center pr-3 pt-8"
           >
             <FontAwesomeIcon
               icon={showPassword ? faEyeSlash : faEye}
-              className="text-gray-500"
+              className="text-black"
             />
           </button>
         </div>
@@ -216,11 +216,11 @@ function Register() {
           <button
             type="button"
             onClick={toggleConfirmPasswordVisibility}
-            className="absolute inset-y-0 right-0 flex items-center pr-3"
+            className="absolute inset-y-0 right-0 flex items-center pr-3 pt-8"
           >
             <FontAwesomeIcon
               icon={showConfirmPassword ? faEyeSlash : faEye}
-              className="text-gray-500"
+              className="text-black"
             />
           </button>
         </div>
