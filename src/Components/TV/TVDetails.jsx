@@ -2,10 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SingleTVpage from "./SingleTVpage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebook, faTwitter, faInstagram, faImdb } from "@fortawesome/free-brands-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFacebook,
+  faTwitter,
+  faInstagram,
+  faImdb,
+} from "@fortawesome/free-brands-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
 import { auth, db } from "../LoginFunc/Firebase";
 
 export default function TVDetails() {
@@ -65,7 +77,7 @@ export default function TVDetails() {
         if (docSnap.exists()) {
           const currentTVList = docSnap.data().myTVList || [];
           const newTVList = isInList
-            ? currentTVList.filter(tvId => tvId !== id)
+            ? currentTVList.filter((tvId) => tvId !== id)
             : [...currentTVList, id];
           await updateDoc(docRef, { myTVList: newTVList });
 
@@ -88,7 +100,10 @@ export default function TVDetails() {
             <div className="movie__intro">
               <img
                 className="movie__backdrop"
-                src={`https://image.tmdb.org/t/p/original${tvDetails.backdrop_path || ""}`}
+                src={`https://image.tmdb.org/t/p/original${
+                  tvDetails.backdrop_path ||
+                  renderFallbackImage("Backdrop Not Available")
+                }`}
                 alt="Backdrop"
               />
             </div>
@@ -98,7 +113,9 @@ export default function TVDetails() {
                   <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
                   <img
                     className="movie__poster object-cover w-full h-full transition-opacity duration-300"
-                    src={`https://image.tmdb.org/t/p/original${tvDetails.poster_path || ""}`}
+                    src={`https://image.tmdb.org/t/p/original${
+                      tvDetails.poster_path || ""
+                    }`}
                     alt="Poster"
                   />
                   <div
@@ -162,14 +179,21 @@ export default function TVDetails() {
               <div className="movie__detailRight">
                 <div className="movie__detailRightTop">
                   <br />
-                  <div className="movie__name mt-2 md:mt-0 text-3xl md:text-5xl">
+                  <div className="movie__name mt-2 md:mt-0 text-2xl md:text-5xl">
                     {tvDetails.name}
                   </div>
-                  <div className="movie__tagline">
-                    {tvDetails.tagline ? tvDetails.tagline : <br />}
-                  </div>
+                  {tvDetails.tagline && (
+                    <div className="movie__tagline">
+                      {tvDetails.tagline ? tvDetails.tagline : <br />}
+                    </div>
+                  )}
+
                   <div className="movie__rating">
-                    {tvDetails.vote_average} <i className="fas fa-star" />
+                    <FontAwesomeIcon
+                      className="text-yellow-400"
+                      icon={faStar}
+                    />
+                    {tvDetails.vote_average}
                     <span className="movie__voteCount">
                       ({tvDetails.vote_count} votes)
                     </span>
@@ -182,7 +206,7 @@ export default function TVDetails() {
                   <div className="movie__releaseDate">
                     First air date: {tvDetails.first_air_date}
                   </div>
-                  <div className="movie__genres pt-7 pb-0">
+                  <div className="movie__genres pt-0 md:pt-7 pb-0 hidden md:block">
                     {tvDetails.genres &&
                       tvDetails.genres.map((genre) => (
                         <span className="movie__genre" key={genre.id}>

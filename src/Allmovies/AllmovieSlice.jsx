@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const API_KEY = 'd00cb3e60d55a92130bdafb5ff634708';
 const BASE_URL = 'https://api.themoviedb.org/3';
 
-const fetchAllPages = async (url, maxPages = 10) => {
+const fetchAllPages = async (url, maxPages = 5) => {
     let allResults = [];
     let page = 1;
     let totalPages = 1;
@@ -45,6 +45,12 @@ export const fetchPopularTvShows = createAsyncThunk('tmdb/fetchPopularTvShows', 
     return data.results;
 });
 
+export const fetchPopularAnimationTvShows = createAsyncThunk('tmdb/fetchPopularAnimationTvShows', async () => {
+    const response = await fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&sort_by=popularity.desc&with_genres=16`);
+    const data = await response.json();
+    return data.results;
+});
+
 const tmdbSlice = createSlice({
     name: 'tmdb',
     initialState: {
@@ -52,6 +58,7 @@ const tmdbSlice = createSlice({
         popularMovies: [],
         upcomingMovies: [],
         popularTvShows: [],
+        popularAnimationTvShows: [],
         status: 'idle',
         error: null,
     },
@@ -67,6 +74,18 @@ const tmdbSlice = createSlice({
                 state.popularTvShows = action.payload;
             })
             .addCase(fetchPopularTvShows.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // Fetching popular animation TV shows
+            .addCase(fetchPopularAnimationTvShows.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchPopularAnimationTvShows.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.popularAnimationTvShows = action.payload;
+            })
+            .addCase(fetchPopularAnimationTvShows.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })

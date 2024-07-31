@@ -11,6 +11,7 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faFacebook,
   faTwitter,
@@ -145,7 +146,13 @@ const Moviedetail = () => {
                     alt="Poster"
                   />
                 ) : (
-                  ""
+                  <div >
+                      <img
+                        src="/Images/klkl.jpg"
+                        alt={tvShow.name}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
                 )}
                 <div
                   className={`absolute top-5 left-52 md:top-5 md:left-60 transform text-3xl h-10 w-10 cursor-pointer transition-opacity duration-300 opacity-0 group-hover:opacity-100 ${

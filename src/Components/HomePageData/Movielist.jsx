@@ -5,6 +5,7 @@ import {
   fetchTopRatedMovies,
   fetchPopularMovies,
   fetchUpcomingMovies,
+  fetchPopularAnimationTvShows,
 } from "../../Allmovies/AllmovieSlice";
 import "react-multi-carousel/lib/styles.css";
 import Carousel from "react-multi-carousel";
@@ -54,7 +55,7 @@ const MovieItem = React.memo(({ movie, type }) => (
     >
       <LazyLoadImage
         src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-        alt={movie.title}
+        alt={type === "movie" ? movie.original_title : movie.original_name}
         className="cards__img"
         effect="blur"
         placeholderSrc="path/to/placeholder-image.jpg"
@@ -82,6 +83,7 @@ const MovieList = () => {
     topRatedMovies,
     upcomingMovies,
     popularMovies,
+    popularAnimationTvShows,
     status,
     error,
   } = useSelector((state) => state.tmdb);
@@ -96,6 +98,7 @@ const MovieList = () => {
             dispatch(fetchPopularTvShows()),
             dispatch(fetchPopularMovies()),
             dispatch(fetchUpcomingMovies()),
+            dispatch(fetchPopularAnimationTvShows()),
           ]);
         } catch (error) {
           console.error("Failed to fetch data:", error);
@@ -109,7 +112,6 @@ const MovieList = () => {
   }, [dispatch, status]);
 
   useEffect(() => {
-    // Ensure loading state is set correctly when data is already present
     if (status === "succeeded") {
       setLoading(false);
     }
@@ -134,7 +136,7 @@ const MovieList = () => {
   return (
     <div>
       <section className="movie-section">
-        <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5 ">
+        <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
           Popular TV Shows
         </h2>
         <Carousel
@@ -174,14 +176,14 @@ const MovieList = () => {
       </section>
 
       <div className="hidden md:block">
-        <h2 className="text-white   text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
+        <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
           Latest Movie Trailers
         </h2>
         <LatestMovieTrailers />
       </div>
 
       <section className="movie-section">
-        <h2 className="text-white  text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
+        <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
           Popular Movies
         </h2>
         <Carousel
@@ -216,6 +218,26 @@ const MovieList = () => {
           />
         </a>
       </div>
+
+      <section className="movie-section">
+        <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
+          Popular Anime
+        </h2>
+        <Carousel
+          responsive={responsive}
+          infinite={true}
+          autoPlay={true}
+          autoPlaySpeed={5000}
+          keyBoardControl={true}
+          transitionDuration={1000}
+          arrows={true}
+          showDots={false}
+        >
+          {popularAnimationTvShows.map((movie) => (
+            <MovieItem key={movie.id} movie={movie} type="tv" />
+          ))}
+        </Carousel>
+      </section>
 
       <section className="movie-section">
         <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">

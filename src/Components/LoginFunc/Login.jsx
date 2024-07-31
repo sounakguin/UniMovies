@@ -1,8 +1,9 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../LoginFunc/Firebase";
-
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const [formdata, setformData] = useState({
@@ -60,12 +61,15 @@ function Login() {
 
     if (hasError) {
       setError(newErrors);
+      // Show toast for each error
+      if (newErrors.email) toast.error(newErrors.email);
+      if (newErrors.password) toast.error(newErrors.password);
       return;
     }
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-
+      toast.success("Login successful!");
       navigate("/");
 
       setformData({
@@ -73,7 +77,14 @@ function Login() {
         password: "",
       });
     } catch (error) {
-      console.log(error.message);
+      // Show error message based on Firebase error code
+      if (error.code.includes("auth/user-not-found")) {
+        toast.error("No user found with this email.");
+      } else if (error.code.includes("auth/wrong-password")) {
+        toast.error("Incorrect password.");
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
     }
   };
 
@@ -142,6 +153,8 @@ function Login() {
           </Link>
         </p>
       </form>
+
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
     </div>
   );
 }

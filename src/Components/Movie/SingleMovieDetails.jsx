@@ -275,24 +275,13 @@ const SingleMovieDetails = () => {
                       className="w-full h-full object-cover rounded-lg"
                     />
                   ) : (
-                    <div
-                      className="fallback-image"
-                      style={{
-                        width: "100%",
-                        height: "50vh",
-                        display: "flex",
-                        alignItems:"center",
-                        justifyContent: "center",
-                        backgroundColor: "white",
-                        color: "black",
-                        textAlign: "center",
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      No image available
-                    </div>
+                    <div >
+                    <img
+                      src="/Images/klkl.jpg"
+                      alt={movie.name}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
                   )}
                 </div>
               </Link>
@@ -328,23 +317,13 @@ const SingleMovieDetails = () => {
                       className="w-full h-full object-cover rounded-lg"
                     />
                   ) : (
-                    <div
-                      className="fallback-image"
-                      style={{
-                        width: "100%",
-                        height: "50vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        backgroundColor: "white",
-                        color: "black",
-                        textAlign: "center",
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      No image available
-                    </div>
+                    <div >
+                    <img
+                      src="/Images/klkl.jpg"
+                      alt={movie.name}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
                   )}
                 </div>
               </Link>

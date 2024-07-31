@@ -3,9 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { auth, db } from "../LoginFunc/Firebase";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 function Register() {
-  const [formdata, setformData] = useState({
+  const [formdata, setFormData] = useState({
     email: "",
     password: "",
     confirmpassword: "",
@@ -13,44 +17,30 @@ function Register() {
     phone: "",
   });
 
-  const [error, setError] = useState({
-    email: "",
-    password: "",
-    confirmpassword: "",
-    fullname: "",
-    phone: "",
-  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setformData({
+    setFormData({
       ...formdata,
       [name]: value,
-    });
-
-    // Clear previous error for the field when typing
-    setError({
-      ...error,
-      [name]: "",
     });
   };
 
   const validatePhoneNumber = (phone) => {
-    // Regex for 10 digit phone number starting with +91
     const phoneRegex = /^\+91\d{10}$/;
     return phoneRegex.test(phone);
   };
 
   const validatePassword = (password) => {
-    // Regex for password with at least one special character, one number, one letter, and be 8 characters long
     const passwordRegex = /^(?=.*[!@#$%^&*])(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
     return passwordRegex.test(password);
   };
 
   const validateEmail = (email) => {
-    // Custom email validation regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -59,53 +49,45 @@ function Register() {
     e.preventDefault();
     const { email, password, confirmpassword, fullname, phone } = formdata;
 
-    // Validation checks
     let hasError = false;
-    const newErrors = {
-      email: "",
-      password: "",
-      confirmpassword: "",
-      fullname: "",
-      phone: "",
-    };
 
     if (!validatePhoneNumber(phone)) {
-      newErrors.phone =
-        "Phone number must start with +91 and be 10 digits long";
+      toast.error("Phone number must start with +91 and be 10 digits long", {
+        position: "top-right",
+      });
       hasError = true;
     }
 
     if (!validatePassword(password)) {
-      newErrors.password =
-        "Password must contain at least one special character, one number, one letter, and be 8 characters long";
+      toast.error("Password must contain at least one special character, one number, one letter, and be 8 characters long", {
+        position: "top-right",
+      });
       hasError = true;
     }
 
     if (password !== confirmpassword) {
-      newErrors.confirmpassword = "Passwords do not match";
+      toast.error("Passwords do not match", {
+        position: "top-right",
+      });
       hasError = true;
     }
 
     if (!validateEmail(email)) {
-      newErrors.email = "Invalid email format";
+      toast.error("Invalid email format", {
+        position: "top-right",
+      });
       hasError = true;
     }
 
     if (hasError) {
-      setError(newErrors);
       return;
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log("User created:", user);
 
-      // Save the user data in Firestore
       await setDoc(doc(db, "Users", user.uid), {
         Email: user.email,
         FullName: fullname,
@@ -114,28 +96,47 @@ function Register() {
       });
       console.log("Data stored in Firestore");
 
-      // Clear form data and errors
-      setformData({
+      setFormData({
         email: "",
         password: "",
         confirmpassword: "",
         fullname: "",
         phone: "",
       });
-      setError({});
 
-      // Redirect to login page
-      navigate('/login');
+      toast.success("Registration successful! Redirecting to login...", {
+        position: "top-right",
+      });
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (error) {
-      console.log("Error registering user:", error.message);
+      if (error.code === 'auth/email-already-in-use') {
+        toast.error("Email is already in use", {
+          position: "top-right",
+        });
+      } else {
+        toast.error("Error registering user: " + error.message, {
+          position: "top-right",
+        });
+      }
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen login">
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
       <form
         onSubmit={handleRegister}
-        className="bg-gray-200 p-6 rounded shadow-md w-full max-w-sm"
+        className="bg-gray-200 p-6 rounded shadow-md w-full max-w-sm relative"
       >
         <h3 className="text-2xl font-bold mb-4">Sign Up</h3>
 
@@ -144,17 +145,12 @@ function Register() {
           <input
             type="text"
             name="fullname"
-            className={`w-full px-3 py-2 border ${
-              error.fullname ? "border-red-500" : "border-gray-300"
-            } rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Full name"
             value={formdata.fullname}
             onChange={handleChange}
             required
           />
-          {error.fullname && (
-            <p className="text-red-500 text-xs mt-1">{error.fullname}</p>
-          )}
         </div>
 
         <div className="mb-4">
@@ -162,17 +158,12 @@ function Register() {
           <input
             type="tel"
             name="phone"
-            className={`w-full px-3 py-2 border ${
-              error.phone ? "border-red-500" : "border-gray-300"
-            } rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            placeholder="Enter phone number (+91XXXXXXXXXX)"
+            className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter phone number"
             value={formdata.phone}
             onChange={handleChange}
             required
           />
-          {error.phone && (
-            <p className="text-red-500 text-xs mt-1">{error.phone}</p>
-          )}
         </div>
 
         <div className="mb-4">
@@ -180,53 +171,58 @@ function Register() {
           <input
             type="text"
             name="email"
-            className={`w-full px-3 py-2 border ${
-              error.email ? "border-red-500" : "border-gray-300"
-            } rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter email"
             value={formdata.email}
             onChange={handleChange}
             required
           />
-          {error.email && (
-            <p className="text-red-500 text-xs mt-1">{error.email}</p>
-          )}
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label className="block text-gray-700">Password</label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
-            className={`w-full px-3 py-2 border ${
-              error.password ? "border-red-500" : "border-gray-300"
-            } rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter password"
             value={formdata.password}
             onChange={handleChange}
             required
           />
-          {error.password && (
-            <p className="text-red-500 text-xs mt-1">{error.password}</p>
-          )}
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute inset-y-0 right-0 flex items-center pr-3"
+          >
+            <FontAwesomeIcon
+              icon={showPassword ? faEyeSlash : faEye}
+              className="text-gray-500"
+            />
+          </button>
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label className="block text-gray-700">Confirm Password</label>
           <input
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             name="confirmpassword"
-            className={`w-full px-3 py-2 border ${
-              error.confirmpassword ? "border-red-500" : "border-gray-300"
-            } rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Re-enter password"
             value={formdata.confirmpassword}
             onChange={handleChange}
             required
           />
-          {error.confirmpassword && (
-            <p className="text-red-500 text-xs mt-1">{error.confirmpassword}</p>
-          )}
+          <button
+            type="button"
+            onClick={toggleConfirmPasswordVisibility}
+            className="absolute inset-y-0 right-0 flex items-center pr-3"
+          >
+            <FontAwesomeIcon
+              icon={showConfirmPassword ? faEyeSlash : faEye}
+              className="text-gray-500"
+            />
+          </button>
         </div>
 
         <div className="flex items-center justify-between mb-4">

@@ -136,7 +136,7 @@ export default function SingleTVpage() {
     <div className="container mx-auto p-4">
       {credits && credits.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold pl-0 md:pl-2 text-white">
+          <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 text-center md:text-left">
             Credits
           </h2>
           <Carousel
@@ -153,7 +153,7 @@ export default function SingleTVpage() {
           >
             {credits.map((credit) => (
               <Link key={credit.id} to={`/person/${credit.id}`}>
-                <div className="px-5 flex justify-center mt-5 flex-col">
+                <div className="px-5 flex justify-center items-center  mt-5 flex-col">
                   {credit.profile_path ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${credit.profile_path}`}
@@ -177,7 +177,7 @@ export default function SingleTVpage() {
 
       {videos && videos.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 mt-5 pl-0 md:pl-4 text-white">
+          <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2 text-center md:text-left">
             Watch Videos and Trailers
           </h2>
           <Carousel
@@ -210,7 +210,7 @@ export default function SingleTVpage() {
 
       {backdrops && backdrops.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
+          <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
             Backdrops
           </h2>
           <Carousel
@@ -240,7 +240,7 @@ export default function SingleTVpage() {
 
       {posters && posters.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
+          <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
             Posters
           </h2>
           <Carousel
@@ -264,22 +264,12 @@ export default function SingleTVpage() {
                     className="w-full h-full object-cover rounded-lg"
                   />
                 ) : (
-                  <div
-                    className="fallback-image"
-                    style={{
-                      width: "100%",
-                      height: "50vh",
-                      display: "flex",
-                      justifyContent: "center",
-                      backgroundColor: "white",
-                      color: "black",
-                      textAlign: "center",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      borderRadius: "4px",
-                    }}
-                  >
-                    No image available
+                  <div>
+                    <img
+                      src="/Images/klkl.jpg"
+                      alt="Poster"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
                   </div>
                 )}
               </div>
@@ -290,7 +280,7 @@ export default function SingleTVpage() {
 
       {similar && similar.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
+          <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
             Similar TV Shows
           </h2>
           <Carousel
@@ -315,22 +305,12 @@ export default function SingleTVpage() {
                       className="w-full h-full object-cover rounded-lg"
                     />
                   ) : (
-                    <div
-                      className="fallback-image"
-                      style={{
-                        width: "100%",
-                        height: "50vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        backgroundColor: "white",
-                        color: "black",
-                        textAlign: "center",
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      No image available
+                    <div>
+                      <img
+                        src="/Images/klkl.jpg"
+                        alt={tvShow.name}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
                     </div>
                   )}
 
@@ -344,7 +324,7 @@ export default function SingleTVpage() {
 
       {recommendations && recommendations.length > 0 && (
         <div className="">
-          <h2 className="text-xl font-semibold mb-4 pl-0 md:pl-2 text-white">
+          <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
             Recommended TV Shows
           </h2>
           <Carousel
@@ -369,22 +349,12 @@ export default function SingleTVpage() {
                       className="w-full h-full object-cover rounded-lg"
                     />
                   ) : (
-                    <div
-                      className="fallback-image"
-                      style={{
-                        width: "100%",
-                        height: "50vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        backgroundColor: "white",
-                        color: "black",
-                        textAlign: "center",
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      No image available
+                    <div>
+                      <img
+                        src="/Images/klkl.jpg"
+                        alt={tvShow.name}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
                     </div>
                   )}
 
