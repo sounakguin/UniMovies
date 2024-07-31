@@ -12,6 +12,162 @@ body,
   overflow: visible;
   background-color: black;
 }
+/* all movie and tv cards */
+/* Container for the card */
+.card-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px; /* rounded-lg */
+  border: 1px solid rgb(99, 99, 99); /* border-gray-300 */
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Card hover effects */
+.card-container:hover {
+  transform: scale(1.05);
+  z-index: 1000;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+/* Card image */
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Fallback image style */
+.fallback-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff; /* bg-white */
+  color: #000000; /* text-black */
+  font-size: 1rem; /* text-lg */
+  font-weight: bold;
+  border-radius: 0.5rem; /* rounded-lg */
+}
+
+/* Overlay styles */
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem; /* p-4 */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);  /* bg-gradient-to-t from-black via-transparent to-transparent */
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Show overlay on hover */
+.card-container:hover .card-overlay {
+  opacity: 1;
+}
+
+/* Title style */
+.card-title {
+  font-weight: bold; /* font-bold */
+  font-size: 0.875rem; /* text-sm */
+  margin-bottom: 0.25rem; /* mb-1 */
+}
+
+/* Runtime and rating style */
+.card-runtime {
+  font-size: 0.75rem; /* text-xs */
+  margin-bottom: 0.25rem; /* mb-1 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Rating style */
+.card-rating {
+  color: #fbbf24; /* text-yellow-400 */
+  display: flex;
+  align-items: center;
+}
+
+/* Description style */
+.card-description {
+  font-style: italic; /* italic */
+  font-size: 0.75rem; /* text-xs */
+}
+
+/* Responsive grid layout */
+.grid-container {
+  display: grid;
+  gap: 0.5rem; /* gap-2 */
+  justify-content: center; /* Center align the cards */
+  grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
+  }
+
+  .card-container {
+    width: 10rem; /* Adjust width for tablet */
+    height: 15rem; /* Adjust height for tablet */
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(5, 1fr); /* 5 cards per row */
+  }
+
+  .card-container {
+    width: 12rem; /* Adjust width for desktop */
+    height: 18rem; /* Adjust height for desktop */
+  }
+}
+
+/* Larger screens */
+@media (min-width: 1440px) {
+  .grid-container {
+    grid-template-columns: repeat(6, 1fr); /* 6 cards per row */
+  }
+
+  .card-container {
+    width: 14rem; /* Adjust width for larger screens */
+    height: 20rem; /* Adjust height for larger screens */
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .fallback-image {
+    font-size: 0.875rem; /* Adjust font size for mobile */
+  }
+  
+  .card-container {
+    width: 9rem; /* Adjust width for mobile */
+    height: 13rem; /* Adjust height for mobile */
+  }
+
+  .card-overlay {
+    display: none; /* Hide overlay on mobile */
+  }
+
+  .grid-container {
+    gap: 0.25rem; /* Reduce gap for mobile */
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 cards per row */
+    justify-items: center; /* Center align the cards within their grid cells */
+  }
+}
+
+
 
 /* Custom CSS */
 .posterImage {
@@ -88,50 +244,20 @@ body,
   z-index: 0;
   border: 1px solid rgb(99, 99, 99);
 }
-/* Ensure card container has a defined height */
-.container {
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  flex-wrap: wrap; /* Allow wrapping to next line */
-  height: 100%; /* Ensure the container takes full height */
-}
-
-/* Base card styles */
 .cards {
   display: inline-block;
   transition: transform 0.2s;
   position: relative;
   border-radius: 10px;
   overflow: hidden;
-  margin: 0.25rem; /* Reduced margin */
+  margin: 0.5rem;
   cursor: pointer;
-  min-width: 150px; /* Minimum width for mobile */
-  height: 100%; /* Full height of the container */
+  min-width: 200px;
+  height: 300px;
   z-index: 0;
   border: 1px solid rgb(99, 99, 99);
-  text-align: center; /* Center text and content */
 }
 
-/* Add left margin for the cards on larger screens */
-@media (min-width: 768px) {
-  .cards {
-    margin-left: 1rem; /* Increase left margin for tablets and up */
-  }
-}
-
-@media (min-width: 1024px) {
-  .cards {
-    margin-left: 1.5rem; /* Increase left margin for desktops */
-  }
-}
-
-@media (min-width: 1440px) {
-  .cards {
-    margin-left: 2rem; /* Further increase left margin for larger screens */
-  }
-}
-
-/* Hover effect and other styles */
 .cards:hover {
   transform: scale(1.12);
   z-index: 1000;
@@ -141,16 +267,14 @@ body,
 }
 
 .cards__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensure image covers the card area */
+  height: 300px;
 }
 
 .cards__overlay {
   position: absolute;
   padding: 0 1rem 1rem 1rem;
-  bottom: 0;
-  height: 100%; /* Full height of the card */
+  bottom: 0px;
+  height: 290px;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -160,18 +284,18 @@ body,
   transition: opacity 0.2s;
 }
 
-.cards:hover .cards__overlay {
+.cards__overlay:hover {
   opacity: 1;
 }
 
 .card__title {
   font-weight: 900;
-  font-size: 0.875rem; /* Slightly smaller for mobile */
+  font-size: 1rem;
   margin-bottom: 0.4rem;
 }
 
 .card__runtime {
-  font-size: 0.625rem; /* Smaller font size */
+  font-size: 0.75rem;
   margin-bottom: 0.25rem;
 }
 
@@ -181,54 +305,9 @@ body,
 
 .card__description {
   font-style: italic;
-  font-size: 0.625rem; /* Smaller font size */
+  font-size: 0.75rem;
   margin-bottom: 0.25rem;
 }
-
-/* Responsive grid layout */
-.grid {
-  display: grid;
-  gap: 0.5rem; /* Reduced gap for mobile and tablet */
-  grid-template-columns: repeat(2, 1fr); /* Default: 2 cards per row */
-}
-
-/* Tablet */
-@media (min-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
-    gap: 1rem; /* Increase gap for tablets */
-  }
-}
-
-/* Desktop */
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(5, 1fr); /* 5 cards per row */
-    gap: 1.5rem; /* Increase gap for desktops */
-  }
-}
-
-/* Larger screens */
-@media (min-width: 1440px) {
-  .grid {
-    grid-template-columns: repeat(6, 1fr); /* 6 cards per row */
-    gap: 2rem; /* Increase gap for larger screens */
-  }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .cards {
-    min-width: 120px; /* Reduced width for mobile */
-    height: 240px; /* Reduced height for mobile */
-  }
-
-  .cards__overlay {
-    display: none; /* Hide overlay on mobile */
-  }
-}
-
-
 
 .movie {
   width: 100%;

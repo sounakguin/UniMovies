@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import SearchTVdata from "./SearchTVdata";
 import FilterTV from "./FilterTV";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 const API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
 
@@ -239,8 +241,12 @@ export default function TV() {
                   <div className="card__runtime">
                     {tvShow.first_air_date}
                     <span className="card__rating">
+                    <FontAwesomeIcon
+                        className="text-yellow-400 pr-1"
+                        icon={faStar}
+                      />
                       {tvShow.vote_average}
-                      <i className="fas fa-star" />
+              
                     </span>
                   </div>
                   <div className="card__description">
