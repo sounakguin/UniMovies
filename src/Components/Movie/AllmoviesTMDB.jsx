@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import GenreFilter from "../Movie/FilterMovie";
 import SearchMovies from "../Movie/Searchbar";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 const TMDB_API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
 
@@ -81,7 +79,8 @@ export default function AllmoviesTMDB() {
 
   // Handle search results from SearchMovies component
   const handleSearchResults = (data) => {
-    setMovies(data);
+  
+    setMovies(data); 
   };
 
   // Handle genre button click
@@ -137,11 +136,11 @@ export default function AllmoviesTMDB() {
         handleGenreClick={handleGenreClick}
       />
       <div className="hidden md:block mt-0 md:mt-8">
-        <p className=" text-orange-300 text-center text-3xl">Special Filter</p>
-        <div className="flex justify-center mt-5 w-3/4 mx-auto gap-4">
-          <button
-            onClick={() => handleCategoryChange("popular")}
-            className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+      <p className=" text-orange-300 text-center text-3xl">Special Filter</p>
+      <div className="flex justify-center mt-5 w-3/4 mx-auto gap-4">
+        <button
+          onClick={() => handleCategoryChange("popular")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
             ${
               category === "popular"
                 ? "bg-blue-500 text-white"
@@ -149,15 +148,15 @@ export default function AllmoviesTMDB() {
             }
             ${category === "popular" ? "border-none" : "border border-gray-300"}
           `}
-            style={{
-              borderRadius: "8px",
-            }}
-          >
-            Popular
-          </button>
-          <button
-            onClick={() => handleCategoryChange("top_rated")}
-            className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Popular
+        </button>
+        <button
+          onClick={() => handleCategoryChange("top_rated")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
             ${
               category === "top_rated"
                 ? "bg-blue-500 text-white"
@@ -169,15 +168,15 @@ export default function AllmoviesTMDB() {
                 : "border border-gray-300"
             }
           `}
-            style={{
-              borderRadius: "8px",
-            }}
-          >
-            Top Rated
-          </button>
-          <button
-            onClick={() => handleCategoryChange("upcoming")}
-            className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Top Rated
+        </button>
+        <button
+          onClick={() => handleCategoryChange("upcoming")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
             ${
               category === "upcoming"
                 ? "bg-blue-500 text-white"
@@ -187,15 +186,15 @@ export default function AllmoviesTMDB() {
               category === "upcoming" ? "border-none" : "border border-gray-300"
             }
           `}
-            style={{
-              borderRadius: "8px",
-            }}
-          >
-            Upcoming
-          </button>
-          <button
-            onClick={() => handleCategoryChange("now_playing")}
-            className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Upcoming
+        </button>
+        <button
+          onClick={() => handleCategoryChange("now_playing")}
+          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
             ${
               category === "now_playing"
                 ? "bg-blue-500 text-white"
@@ -207,58 +206,72 @@ export default function AllmoviesTMDB() {
                 : "border border-gray-300"
             }
           `}
-            style={{
-              borderRadius: "8px",
-            }}
-          >
-            Now Playing
-          </button>
-        </div>
+          style={{
+            borderRadius: "8px",
+          }}
+        >
+          Now Playing
+        </button>
+      </div>
       </div>
 
       <br />
-      <div class="mx-auto md:w-3/4 mt-5">
-  <div class="grid-container">
-    {movies.map((movie, index) => (
-      <Link
-        to={`/movie/${movie.id}`}
-        style={{ textDecoration: "none", color: "white" }}
-        key={movie.id}
-        ref={index === movies.length - 1 ? lastMovieElementRef : null}
-      >
-        <div class="card-container">
-          {movie.poster_path ? (
-            <LazyLoadImage
-              class="card-image"
-              src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-              alt={movie.original_title}
-              effect="blur"
-            />
-          ) : (
-            <div class="fallback-image">
-              No image available
-            </div>
-          )}
-          <div class="card-overlay">
-            <div class="card-title">{movie.original_title}</div>
-            <div class="card-runtime">
-              {movie.release_date}
-              <span class="card-rating">
-                <FontAwesomeIcon class="pr-1" icon={faStar} />
-                {movie.vote_average}
-              </span>
-            </div>
-            <div class="card-description">
-              {movie.overview.slice(0, 115) + "..."}
-            </div>
-          </div>
+      <div className="mx-auto  md:w-3/4 mt-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          {movies.map((movie, index) => (
+            <Link
+              to={`/movie/${movie.id}`}
+              style={{ textDecoration: "none", color: "white" }}
+              key={movie.id}
+              ref={index === movies.length - 1 ? lastMovieElementRef : null}
+            >
+              <div className="cards m-2">
+                {movie.poster_path ? (
+                  <LazyLoadImage
+                    className="cards__img"
+                    src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                    alt={movie.original_title}
+                    effect="blur"
+                  />
+                ) : (
+                  <div
+                    className="fallback-image"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                    
+                      justifyContent: "center",
+                      backgroundColor: "white",
+                      color: "black",
+                      textAlign: "center",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    No image available
+                  </div>
+                )}
+                <div className="cards__overlay">
+                  <div className="card__title">{movie.original_title}</div>
+                  <div className="card__runtime">
+                    {movie.release_date}
+                    <span className="card__rating">
+                      {movie.vote_average}
+                      <i className="fas fa-star" />
+                    </span>
+                  </div>
+                  <div className="card__description">
+                    {movie.overview.slice(0, 115) + "..."}
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
-      </Link>
-    ))}
-  </div>
-  {isLoading && <div>Loading...</div>}
-</div>
-
+        {isLoading && <div>Loading...</div>}
+      </div>
     </div>
   );
 }
