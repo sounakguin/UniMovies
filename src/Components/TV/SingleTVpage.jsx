@@ -100,7 +100,7 @@ export default function SingleTVpage() {
           <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 text-center md:text-left">
             Credits
           </h2>
-          <Carousel responsive={responsive2} {...commonCarouselSettings}>
+          <Carousel responsive={responsive} {...commonCarouselSettings}>
             {data.credits.map((credit) => (
               <Link key={credit.id} to={`/person/${credit.id}`}>
                 <CarouselItem item={credit} type="person" />

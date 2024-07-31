@@ -190,7 +190,7 @@ const SingleMovieDetails = () => {
           </h2>
           <MemoizedCarousel
             items={credits}
-            responsive={responsive2}
+            responsive={responsive}
             renderItem={renderCredits}
             autoPlay={false}
           />
