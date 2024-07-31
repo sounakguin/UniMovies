@@ -103,6 +103,7 @@ body,
   position: relative;
   border-radius: 10px;
   overflow: hidden;
+  margin: 0.25rem; /* Reduced margin */
   cursor: pointer;
   min-width: 150px; /* Minimum width for mobile */
   height: 100%; /* Full height of the container */
@@ -111,6 +112,26 @@ body,
   text-align: center; /* Center text and content */
 }
 
+/* Add left margin for the cards on larger screens */
+@media (min-width: 768px) {
+  .cards {
+    margin-left: 1rem; /* Increase left margin for tablets and up */
+  }
+}
+
+@media (min-width: 1024px) {
+  .cards {
+    margin-left: 1.5rem; /* Increase left margin for desktops */
+  }
+}
+
+@media (min-width: 1440px) {
+  .cards {
+    margin-left: 2rem; /* Further increase left margin for larger screens */
+  }
+}
+
+/* Hover effect and other styles */
 .cards:hover {
   transform: scale(1.12);
   z-index: 1000;
@@ -122,14 +143,14 @@ body,
 .cards__img {
   width: 100%;
   height: 100%;
-  object-fit: cover; 
+  object-fit: cover; /* Ensure image covers the card area */
 }
 
 .cards__overlay {
   position: absolute;
   padding: 0 1rem 1rem 1rem;
   bottom: 0;
-  height: 100%; 
+  height: 100%; /* Full height of the card */
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -145,12 +166,12 @@ body,
 
 .card__title {
   font-weight: 900;
-  font-size: 0.875rem; 
+  font-size: 0.875rem; /* Slightly smaller for mobile */
   margin-bottom: 0.4rem;
 }
 
 .card__runtime {
-  font-size: 0.625rem; 
+  font-size: 0.625rem; /* Smaller font size */
   margin-bottom: 0.25rem;
 }
 
@@ -160,27 +181,22 @@ body,
 
 .card__description {
   font-style: italic;
-  font-size: 0.625rem; 
+  font-size: 0.625rem; /* Smaller font size */
   margin-bottom: 0.25rem;
 }
 
-
+/* Responsive grid layout */
 .grid {
   display: grid;
-  gap: 0.5rem; 
-  grid-template-columns: repeat(2, 1fr); 
+  gap: 0.5rem; /* Reduced gap for mobile and tablet */
+  grid-template-columns: repeat(2, 1fr); /* Default: 2 cards per row */
 }
 
-
+/* Tablet */
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 1rem; 
-  }
-
-  .cards {
-    min-width: 200px; /* Adjusted for tablets */
-    height: 300px; /* Adjusted for tablets */
+    grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
+    gap: 1rem; /* Increase gap for tablets */
   }
 }
 
@@ -188,12 +204,7 @@ body,
 @media (min-width: 1024px) {
   .grid {
     grid-template-columns: repeat(5, 1fr); /* 5 cards per row */
-    gap: 2rem; /* Increase gap for desktops */
-  }
-
-  .cards {
-    min-width: 200px; /* Reduced width for desktop */
-    height: 300px; /* Reduced height for desktop */
+    gap: 1.5rem; /* Increase gap for desktops */
   }
 }
 
@@ -201,33 +212,22 @@ body,
 @media (min-width: 1440px) {
   .grid {
     grid-template-columns: repeat(6, 1fr); /* 6 cards per row */
-    gap: 3rem; /* Increase gap for larger screens */
-  }
-
-  .cards {
-    min-width: 220px; /* Further reduced width for larger screens */
-    height: 320px; /* Further reduced height for larger screens */
+    gap: 2rem; /* Increase gap for larger screens */
   }
 }
 
-/* Remove hover effect on mobile and tablet */
-@media (max-width: 1024px) {
-  .cards:hover {
-    transform: none; /* Disable zoom effect */
-  }
-}
-
-/* Hide overlay on mobile */
+/* Mobile */
 @media (max-width: 768px) {
-  .cards__overlay {
-    display: none;
+  .cards {
+    min-width: 120px; /* Reduced width for mobile */
+    height: 240px; /* Reduced height for mobile */
   }
 
-  .cards {
-    min-width: 150px; /* Mobile size */
-    height: 330px; /* Adjusted height for mobile */
+  .cards__overlay {
+    display: none; /* Hide overlay on mobile */
   }
 }
+
 
 
 .movie {
