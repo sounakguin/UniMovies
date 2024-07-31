@@ -23,10 +23,10 @@ export default function Footer() {
             
             <ul className="space-y-2 ">
             <p className="text-xl font-bold mb-4">Quick Links</p>
-              <li><a href="#" className=" hover:text-yellow-400 ">Home</a></li>
-              <li><a href="#" className="hover:text-yellow-400  ">Movies</a></li>
-              <li><a href="#" className="hover:text-yellow-400 ">Person</a></li>
-              <li><a href="#" className="hover:text-yellow-400 ">TV</a></li>
+              <li><a href="https://uni-movies.vercel.app/" className=" hover:text-yellow-400 ">Home</a></li>
+              <li><a href="https://uni-movies.vercel.app/Allmovies" className="hover:text-yellow-400  ">Movies</a></li>
+              <li><a href="https://uni-movies.vercel.app/People" className="hover:text-yellow-400 ">Person</a></li>
+              <li><a href="https://uni-movies.vercel.app/TV" className="hover:text-yellow-400 ">TV</a></li>
             
             </ul>
           </div>

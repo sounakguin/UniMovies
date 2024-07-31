@@ -149,7 +149,7 @@ const Moviedetail = () => {
                   <div >
                       <img
                         src="/Images/klkl.jpg"
-                        alt={tvShow.name}
+                        alt=""
                         className="w-full h-full object-cover rounded-lg"
                       />
                     </div>
