@@ -1,198 +1,122 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
+const API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
+
+const responsive = {
+  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 6 },
+  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 5 },
+  tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
+  mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+};
+
+const responsive2 = {
+  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 7 },
+  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 6 },
+  tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
+  mobile: { breakpoint: { max: 464, min: 0 }, items: 2 },
+};
+
+const responsive3 = {
+  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
+  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4 },
+  tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
+  mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+};
+
+const fetchData = async (id) => {
+  const urls = [
+    `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${API_KEY}&language=en-US`,
+    `https://api.themoviedb.org/3/tv/${id}/images?api_key=${API_KEY}&language=en-US&include_image_language=en,null`,
+    `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${API_KEY}&language=en-US`,
+    `https://api.themoviedb.org/3/tv/${id}/similar?api_key=${API_KEY}&language=en-US`,
+    `https://api.themoviedb.org/3/tv/${id}/recommendations?api_key=${API_KEY}&language=en-US`,
+  ];
+
+  const responses = await Promise.all(urls.map((url) => fetch(url)));
+  const data = await Promise.all(responses.map((res) => res.json()));
+
+  return {
+    videos: data[0].results,
+    posters: data[1].posters,
+    backdrops: data[1].backdrops,
+    credits: data[2].cast,
+    similar: data[3].results,
+    recommendations: data[4].results,
+  };
+};
+
+const CarouselItem = React.memo(({ item, type }) => (
+  <div className="p-2">
+    {item.poster_path ? (
+      <img
+        src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+        alt={item.name}
+        className={`w-full h-full object-cover rounded-lg ${type === 'person' ? 'h-52 w-52' : ''}`}
+      />
+    ) : (
+      <div>
+        <img
+          src="/Images/klkl.jpg"
+          alt={item.name}
+          className="w-full h-full object-cover rounded-lg"
+        />
+      </div>
+    )}
+    <p className="text-white pt-4 text-center">{item.name}</p>
+  </div>
+));
+
 export default function SingleTVpage() {
-  const API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
   const { id } = useParams();
+  const [data, setData] = useState({
+    videos: [],
+    posters: [],
+    backdrops: [],
+    credits: [],
+    similar: [],
+    recommendations: [],
+  });
 
-  const [videos, setVideos] = useState([]);
-  const [posters, setPosters] = useState([]);
-  const [backdrops, setBackdrops] = useState([]);
-  const [credits, setCredits] = useState([]);
-  const [similar, setSimilar] = useState([]);
-  const [recommendations, setRecommendations] = useState([]);
-
-  const responsive = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 6,
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 5,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-    },
-  };
-
-  const responsive2 = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 7,
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 6,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-    },
-  };
-
-  const responsive3 = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 5,
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 4,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-    },
-  };
+  const fetchTVData = useCallback(async () => {
+    try {
+      const fetchedData = await fetchData(id);
+      setData(fetchedData);
+    } catch (error) {
+      console.error("Error fetching TV data:", error);
+    }
+  }, [id]);
 
   useEffect(() => {
-    const fetchTVData = async () => {
-      try {
-        // Fetch videos
-        const videosResponse = await fetch(
-          `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${API_KEY}&language=en-US`
-        );
-        if (!videosResponse.ok) {
-          throw new Error("Failed to fetch videos");
-        }
-        const videosData = await videosResponse.json();
-        setVideos(videosData.results);
-
-        // Fetch posters and backdrops
-        const imagesResponse = await fetch(
-          `https://api.themoviedb.org/3/tv/${id}/images?api_key=${API_KEY}&language=en-US&include_image_language=en,null`
-        );
-        if (!imagesResponse.ok) {
-          throw new Error("Failed to fetch images");
-        }
-        const imagesData = await imagesResponse.json();
-        setPosters(imagesData.posters);
-        setBackdrops(imagesData.backdrops);
-
-        // Fetch credits
-        const creditsResponse = await fetch(
-          `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${API_KEY}&language=en-US`
-        );
-        if (!creditsResponse.ok) {
-          throw new Error("Failed to fetch credits");
-        }
-        const creditsData = await creditsResponse.json();
-        setCredits(creditsData.cast);
-
-        // Fetch similar TV shows
-        const similarResponse = await fetch(
-          `https://api.themoviedb.org/3/tv/${id}/similar?api_key=${API_KEY}&language=en-US`
-        );
-        if (!similarResponse.ok) {
-          throw new Error("Failed to fetch similar TV shows");
-        }
-        const similarData = await similarResponse.json();
-        setSimilar(similarData.results);
-
-        // Fetch recommendations
-        const recommendationsResponse = await fetch(
-          `https://api.themoviedb.org/3/tv/${id}/recommendations?api_key=${API_KEY}&language=en-US`
-        );
-        if (!recommendationsResponse.ok) {
-          throw new Error("Failed to fetch recommendations");
-        }
-        const recommendationsData = await recommendationsResponse.json();
-        setRecommendations(recommendationsData.results);
-      } catch (error) {
-        console.error("Error fetching TV data:", error);
-      }
-    };
-
     fetchTVData();
-  }, [id]);
+  }, [fetchTVData]);
 
   return (
     <div className="container mx-auto p-4">
-      {credits && credits.length > 0 && (
+      {data.credits.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 text-center md:text-left">
             Credits
           </h2>
-          <Carousel
-            responsive={responsive2}
-            infinite={true}
-            autoPlay={false}
-            autoPlaySpeed={0}
-            keyBoardControl={true}
-            transitionDuration={1000}
-            arrows={true}
-            showDots={false}
-            containerClass="carousel-container"
-            itemClass="carousel-item"
-          >
-            {credits.map((credit) => (
+          <Carousel responsive={responsive2} {...commonCarouselSettings}>
+            {data.credits.map((credit) => (
               <Link key={credit.id} to={`/person/${credit.id}`}>
-                <div className="px-5 flex justify-center items-center  mt-5 flex-col">
-                  {credit.profile_path ? (
-                    <img
-                      src={`https://image.tmdb.org/t/p/w500${credit.profile_path}`}
-                      alt={credit.name}
-                      className="h-52 w-52 object-cover rounded-full mt-2"
-                    />
-                  ) : (
-                    <div className="h-52 w-52 flex items-center justify-center rounded-full bg-gray-200 mt-2">
-                      <span className="text-gray-500">{credit.name}</span>
-                    </div>
-                  )}
-                  <p className="text-white text-center pt-4  pb-5">
-                    {credit.name}
-                  </p>
-                </div>
+                <CarouselItem item={credit} type="person" />
               </Link>
             ))}
           </Carousel>
         </div>
       )}
 
-      {videos && videos.length > 0 && (
+      {data.videos.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2 text-center md:text-left">
             Watch Videos and Trailers
           </h2>
-          <Carousel
-            responsive={responsive3}
-            infinite={true}
-            autoPlay={false}
-            autoPlaySpeed={0}
-            keyBoardControl={true}
-            transitionDuration={1000}
-            arrows={true}
-            showDots={false}
-            containerClass="carousel-container"
-            itemClass="carousel-item"
-          >
-            {videos.map((video) => (
+          <Carousel responsive={responsive3} {...commonCarouselSettings}>
+            {data.videos.map((video) => (
               <div key={video.key} className="px-2 flex justify-center">
                 <div className="rounded-lg">
                   <iframe
@@ -208,158 +132,56 @@ export default function SingleTVpage() {
         </div>
       )}
 
-      {backdrops && backdrops.length > 0 && (
+      {data.backdrops.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
             Backdrops
           </h2>
-          <Carousel
-            responsive={responsive}
-            infinite={true}
-            autoPlay={true}
-            autoPlaySpeed={5000}
-            keyBoardControl={true}
-            transitionDuration={1000}
-            arrows={true}
-            showDots={false}
-            containerClass="carousel-container"
-            itemClass="carousel-item"
-          >
-            {backdrops.map((backdrop) => (
-              <div key={backdrop.file_path} className="p-2">
-                <img
-                  src={`https://image.tmdb.org/t/p/original${backdrop.file_path}`}
-                  alt="Backdrop"
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </div>
+          <Carousel responsive={responsive} {...commonCarouselSettings}>
+            {data.backdrops.map((backdrop) => (
+              <CarouselItem key={backdrop.file_path} item={backdrop} type="backdrop" />
             ))}
           </Carousel>
         </div>
       )}
 
-      {posters && posters.length > 0 && (
+      {data.posters.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
             Posters
           </h2>
-          <Carousel
-            responsive={responsive2}
-            infinite={true}
-            autoPlay={true}
-            autoPlaySpeed={5000}
-            keyBoardControl={true}
-            transitionDuration={1000}
-            arrows={true}
-            showDots={false}
-            containerClass="carousel-container"
-            itemClass="carousel-item"
-          >
-            {posters.map((poster) => (
-              <div key={poster.file_path} className="p-2">
-                {poster.file_path ? (
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${poster.file_path}`}
-                    alt="Poster"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                ) : (
-                  <div>
-                    <img
-                      src="/Images/klkl.jpg"
-                      alt="Poster"
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </div>
-                )}
-              </div>
+          <Carousel responsive={responsive2} {...commonCarouselSettings}>
+            {data.posters.map((poster) => (
+              <CarouselItem key={poster.file_path} item={poster} type="poster" />
             ))}
           </Carousel>
         </div>
       )}
 
-      {similar && similar.length > 0 && (
+      {data.similar.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
             Similar TV Shows
           </h2>
-          <Carousel
-            responsive={responsive2}
-            infinite={true}
-            autoPlay={true}
-            autoPlaySpeed={5000}
-            keyBoardControl={true}
-            transitionDuration={1000}
-            arrows={true}
-            showDots={false}
-            containerClass="carousel-container"
-            itemClass="carousel-item"
-          >
-            {similar.map((tvShow) => (
-              <Link to={`/tv/${tvShow.id}`}>
-                <div key={tvShow.id} className="p-2">
-                  {tvShow.poster_path ? (
-                    <img
-                      src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
-                      alt={tvShow.name}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  ) : (
-                    <div>
-                      <img
-                        src="/Images/klkl.jpg"
-                        alt={tvShow.name}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    </div>
-                  )}
-
-                  <p className="text-white  text-center pt-4">{tvShow.name}</p>
-                </div>
+          <Carousel responsive={responsive2} {...commonCarouselSettings}>
+            {data.similar.map((tvShow) => (
+              <Link key={tvShow.id} to={`/tv/${tvShow.id}`}>
+                <CarouselItem item={tvShow} type="similar" />
               </Link>
             ))}
           </Carousel>
         </div>
       )}
 
-      {recommendations && recommendations.length > 0 && (
-        <div className="">
+      {data.recommendations.length > 0 && (
+        <div>
           <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
             Recommended TV Shows
           </h2>
-          <Carousel
-            responsive={responsive2}
-            infinite={true}
-            autoPlay={true}
-            autoPlaySpeed={5000}
-            keyBoardControl={true}
-            transitionDuration={1000}
-            arrows={true}
-            showDots={false}
-            containerClass="carousel-container"
-            itemClass="carousel-item"
-          >
-            {recommendations.map((tvShow) => (
-              <Link to={`/tv/${tvShow.id}`}>
-                <div key={tvShow.id} className="p-2">
-                  {tvShow.poster_path ? (
-                    <img
-                      src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
-                      alt={tvShow.name}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  ) : (
-                    <div>
-                      <img
-                        src="/Images/klkl.jpg"
-                        alt={tvShow.name}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    </div>
-                  )}
-
-                  <p className="text-white pt-4 text-center">{tvShow.name}</p>
-                </div>
+          <Carousel responsive={responsive2} {...commonCarouselSettings}>
+            {data.recommendations.map((tvShow) => (
+              <Link key={tvShow.id} to={`/tv/${tvShow.id}`}>
+                <CarouselItem item={tvShow} type="recommendation" />
               </Link>
             ))}
           </Carousel>
@@ -368,3 +190,15 @@ export default function SingleTVpage() {
     </div>
   );
 }
+
+const commonCarouselSettings = {
+  infinite: true,
+  autoPlay: true,
+  autoPlaySpeed: 5000,
+  keyBoardControl: true,
+  transitionDuration: 1000,
+  arrows: true,
+  showDots: false,
+  containerClass: "carousel-container",
+  itemClass: "carousel-item",
+};

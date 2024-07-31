@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPopularTvShows,
@@ -15,6 +15,19 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+
+// Define removeDuplicatesByPath function outside of the component
+const removeDuplicatesByPath = (array) => {
+  const seen = new Set();
+  return array.filter((item) => {
+    const path = item.poster_path;
+    if (seen.has(path)) {
+      return false;
+    }
+    seen.add(path);
+    return true;
+  });
+};
 
 const responsive = {
   superLargeDesktop: {
@@ -33,18 +46,6 @@ const responsive = {
     breakpoint: { max: 464, min: 0 },
     items: 2,
   },
-};
-
-const removeDuplicatesByPath = (array) => {
-  const seen = new Set();
-  return array.filter((item) => {
-    const path = item.poster_path;
-    if (seen.has(path)) {
-      return false;
-    }
-    seen.add(path);
-    return true;
-  });
 };
 
 const MovieItem = React.memo(({ movie, type }) => (
@@ -88,28 +89,28 @@ const MovieList = () => {
     error,
   } = useSelector((state) => state.tmdb);
 
+  const fetchAllData = useCallback(async () => {
+    setLoading(true);
+    try {
+      await Promise.all([
+        dispatch(fetchTopRatedMovies()),
+        dispatch(fetchPopularTvShows()),
+        dispatch(fetchPopularMovies()),
+        dispatch(fetchUpcomingMovies()),
+        dispatch(fetchPopularAnimationTvShows()),
+      ]);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     if (status === "idle") {
-      const fetchAllData = async () => {
-        setLoading(true);
-        try {
-          await Promise.all([
-            dispatch(fetchTopRatedMovies()),
-            dispatch(fetchPopularTvShows()),
-            dispatch(fetchPopularMovies()),
-            dispatch(fetchUpcomingMovies()),
-            dispatch(fetchPopularAnimationTvShows()),
-          ]);
-        } catch (error) {
-          console.error("Failed to fetch data:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
       fetchAllData();
     }
-  }, [dispatch, status]);
+  }, [status, fetchAllData]);
 
   useEffect(() => {
     if (status === "succeeded") {
@@ -141,12 +142,12 @@ const MovieList = () => {
         </h2>
         <Carousel
           responsive={responsive}
-          infinite={true}
-          autoPlay={true}
+          infinite
+          autoPlay
           autoPlaySpeed={5000}
-          keyBoardControl={true}
+          keyBoardControl
           transitionDuration={1000}
-          arrows={true}
+          arrows
           showDots={false}
         >
           {popularTvShows.map((movie) => (
@@ -161,12 +162,12 @@ const MovieList = () => {
         </h2>
         <Carousel
           responsive={responsive}
-          infinite={true}
-          autoPlay={true}
+          infinite
+          autoPlay
           autoPlaySpeed={5000}
-          keyBoardControl={true}
+          keyBoardControl
           transitionDuration={1000}
-          arrows={true}
+          arrows
           showDots={false}
         >
           {topRatedMovies.map((movie) => (
@@ -188,12 +189,12 @@ const MovieList = () => {
         </h2>
         <Carousel
           responsive={responsive}
-          infinite={true}
-          autoPlay={true}
+          infinite
+          autoPlay
           autoPlaySpeed={5000}
-          keyBoardControl={true}
+          keyBoardControl
           transitionDuration={1000}
-          arrows={true}
+          arrows
           showDots={false}
         >
           {popularMovies.map((movie) => (
@@ -225,12 +226,12 @@ const MovieList = () => {
         </h2>
         <Carousel
           responsive={responsive}
-          infinite={true}
-          autoPlay={true}
+          infinite
+          autoPlay
           autoPlaySpeed={5000}
-          keyBoardControl={true}
+          keyBoardControl
           transitionDuration={1000}
-          arrows={true}
+          arrows
           showDots={false}
         >
           {popularAnimationTvShows.map((movie) => (
@@ -245,12 +246,12 @@ const MovieList = () => {
         </h2>
         <Carousel
           responsive={responsive}
-          infinite={true}
-          autoPlay={true}
+          infinite
+          autoPlay
           autoPlaySpeed={5000}
-          keyBoardControl={true}
+          keyBoardControl
           transitionDuration={1000}
-          arrows={true}
+          arrows
           showDots={false}
         >
           {uniqueUpcomingMovies.map((movie) => (

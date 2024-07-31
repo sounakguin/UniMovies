@@ -3,22 +3,25 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const API_KEY = 'd00cb3e60d55a92130bdafb5ff634708';
 const BASE_URL = 'https://api.themoviedb.org/3';
 
+// Function to fetch all pages of results concurrently
 const fetchAllPages = async (url, maxPages = 5) => {
     let allResults = [];
-    let page = 1;
-    let totalPages = 1;
+    const requests = [];
 
-    do {
-        const response = await fetch(`${url}&page=${page}`);
-        const data = await response.json();
+    for (let page = 1; page <= maxPages; page++) {
+        requests.push(fetch(`${url}&page=${page}`).then(response => response.json()));
+    }
+
+    const results = await Promise.all(requests);
+
+    results.forEach(data => {
         allResults = allResults.concat(data.results);
-        totalPages = data.total_pages;
-        page++;
-    } while (page <= totalPages && page <= maxPages);
+    });
 
     return allResults;
 };
 
+// Thunks to fetch data
 export const fetchTopRatedMovies = createAsyncThunk('tmdb/fetchTopRatedMovies', async () => {
     const response = await fetch(`${BASE_URL}/movie/top_rated?api_key=${API_KEY}`);
     const data = await response.json();
@@ -31,7 +34,12 @@ export const fetchPopularMovies = createAsyncThunk('tmdb/fetchPopularMovies', as
     return data.results;
 });
 
-export const fetchUpcomingMovies = createAsyncThunk('tmdb/fetchUpcomingMovies', async () => {
+export const fetchUpcomingMovies = createAsyncThunk('tmdb/fetchUpcomingMovies', async (_, { getState }) => {
+    const state = getState();
+    if (state.tmdb.upcomingMovies.length > 0) {
+        return state.tmdb.upcomingMovies; // Return cached data if available
+    }
+
     const url = `${BASE_URL}/movie/upcoming?api_key=${API_KEY}`;
     const allResults = await fetchAllPages(url);
     const today = new Date().toISOString().split('T')[0];
@@ -51,6 +59,7 @@ export const fetchPopularAnimationTvShows = createAsyncThunk('tmdb/fetchPopularA
     return data.results;
 });
 
+// Slice to manage TMDB data
 const tmdbSlice = createSlice({
     name: 'tmdb',
     initialState: {
@@ -65,7 +74,6 @@ const tmdbSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            // Fetching popular TV shows
             .addCase(fetchPopularTvShows.pending, (state) => {
                 state.status = 'loading';
             })
@@ -77,7 +85,6 @@ const tmdbSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            // Fetching popular animation TV shows
             .addCase(fetchPopularAnimationTvShows.pending, (state) => {
                 state.status = 'loading';
             })
@@ -89,7 +96,6 @@ const tmdbSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            // Fetching popular movies
             .addCase(fetchPopularMovies.pending, (state) => {
                 state.status = 'loading';
             })
@@ -101,7 +107,6 @@ const tmdbSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            // Fetching upcoming movies
             .addCase(fetchUpcomingMovies.pending, (state) => {
                 state.status = 'loading';
             })
@@ -113,7 +118,6 @@ const tmdbSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            // Fetching top-rated movies
             .addCase(fetchTopRatedMovies.pending, (state) => {
                 state.status = 'loading';
             })
