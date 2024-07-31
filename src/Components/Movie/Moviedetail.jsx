@@ -125,7 +125,7 @@ const Moviedetail = () => {
           <div className="movie__intro opacity-75 md:opacity-100">
             {currentMovieDetail.backdrop_path ? (
               <img
-                className="movie__backdrop"
+                className="movie__backdrop  "
                 src={`https://image.tmdb.org/t/p/original${currentMovieDetail.backdrop_path}`}
                 alt="Backdrop"
               />
@@ -219,7 +219,7 @@ const Moviedetail = () => {
                     <br />
                   )}
                 </div>
-                <div className="movie__rating">
+                <div className="movie__rating flex gap-1">
                 <FontAwesomeIcon className="text-yellow-400" icon={faStar} />
                   {currentMovieDetail.vote_average}
                  
@@ -233,10 +233,10 @@ const Moviedetail = () => {
                 <div className="movie__releaseDate">
                   Release date: {currentMovieDetail.release_date}
                 </div>
-                <div className="movie__genres pt-0 md:pt-7 pb-0">
+                <div className="movie__genres pt-0 md:pt-7 pb-0 hidden md:block">
                   {currentMovieDetail.genres &&
                     currentMovieDetail.genres.map((genre) => (
-                      <span className="movie__genre hidden md:block" key={genre.id}>
+                      <span className="movie__genre  " key={genre.id}>
                         {genre.name}
                       </span>
                     ))}

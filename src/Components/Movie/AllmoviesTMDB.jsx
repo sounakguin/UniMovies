@@ -225,7 +225,7 @@ export default function AllmoviesTMDB() {
               key={movie.id}
               ref={index === movies.length - 1 ? lastMovieElementRef : null}
             >
-              <div className="cards m-2">
+              <div className="cards ">
                 {movie.poster_path ? (
                   <LazyLoadImage
                     className="cards__img"

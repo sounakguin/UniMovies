@@ -88,18 +88,27 @@ body,
   z-index: 0;
   border: 1px solid rgb(99, 99, 99);
 }
+/* Ensure card container has a defined height */
+.container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  flex-wrap: wrap; /* Allow wrapping to next line */
+  height: 100%; /* Ensure the container takes full height */
+}
+
+/* Base card styles */
 .cards {
   display: inline-block;
   transition: transform 0.2s;
   position: relative;
   border-radius: 10px;
   overflow: hidden;
-  margin: 0.5rem;
   cursor: pointer;
-  min-width: 200px;
-  height: 300px;
+  min-width: 150px; /* Minimum width for mobile */
+  height: 100%; /* Full height of the container */
   z-index: 0;
   border: 1px solid rgb(99, 99, 99);
+  text-align: center; /* Center text and content */
 }
 
 .cards:hover {
@@ -111,14 +120,16 @@ body,
 }
 
 .cards__img {
-  height: 300px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
 }
 
 .cards__overlay {
   position: absolute;
   padding: 0 1rem 1rem 1rem;
-  bottom: 0px;
-  height: 290px;
+  bottom: 0;
+  height: 100%; 
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -128,18 +139,18 @@ body,
   transition: opacity 0.2s;
 }
 
-.cards__overlay:hover {
+.cards:hover .cards__overlay {
   opacity: 1;
 }
 
 .card__title {
   font-weight: 900;
-  font-size: 1rem;
+  font-size: 0.875rem; 
   margin-bottom: 0.4rem;
 }
 
 .card__runtime {
-  font-size: 0.75rem;
+  font-size: 0.625rem; 
   margin-bottom: 0.25rem;
 }
 
@@ -149,9 +160,75 @@ body,
 
 .card__description {
   font-style: italic;
-  font-size: 0.75rem;
+  font-size: 0.625rem; 
   margin-bottom: 0.25rem;
 }
+
+
+.grid {
+  display: grid;
+  gap: 0.5rem; 
+  grid-template-columns: repeat(2, 1fr); 
+}
+
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 1rem; 
+  }
+
+  .cards {
+    min-width: 200px; /* Adjusted for tablets */
+    height: 300px; /* Adjusted for tablets */
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(5, 1fr); /* 5 cards per row */
+    gap: 2rem; /* Increase gap for desktops */
+  }
+
+  .cards {
+    min-width: 200px; /* Reduced width for desktop */
+    height: 300px; /* Reduced height for desktop */
+  }
+}
+
+/* Larger screens */
+@media (min-width: 1440px) {
+  .grid {
+    grid-template-columns: repeat(6, 1fr); /* 6 cards per row */
+    gap: 3rem; /* Increase gap for larger screens */
+  }
+
+  .cards {
+    min-width: 220px; /* Further reduced width for larger screens */
+    height: 320px; /* Further reduced height for larger screens */
+  }
+}
+
+/* Remove hover effect on mobile and tablet */
+@media (max-width: 1024px) {
+  .cards:hover {
+    transform: none; /* Disable zoom effect */
+  }
+}
+
+/* Hide overlay on mobile */
+@media (max-width: 768px) {
+  .cards__overlay {
+    display: none;
+  }
+
+  .cards {
+    min-width: 150px; /* Mobile size */
+    height: 330px; /* Adjusted height for mobile */
+  }
+}
+
 
 .movie {
   width: 100%;
