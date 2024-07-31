@@ -108,6 +108,13 @@ const MovieList = () => {
     }
   }, [dispatch, status]);
 
+  useEffect(() => {
+    // Ensure loading state is set correctly when data is already present
+    if (status === "succeeded") {
+      setLoading(false);
+    }
+  }, [status]);
+
   if (loading) {
     return (
       <div>

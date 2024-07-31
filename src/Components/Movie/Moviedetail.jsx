@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SingleMovieDetails from "./SingleMovieDetails";
 import { auth, db } from "../LoginFunc/Firebase";
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import {
   doc,
   getDoc,
@@ -121,7 +122,7 @@ const Moviedetail = () => {
     <div className="movie">
       {currentMovieDetail && (
         <>
-          <div className="movie__intro hidden md:block">
+          <div className="movie__intro opacity-75 md:opacity-100">
             {currentMovieDetail.backdrop_path ? (
               <img
                 className="movie__backdrop"
@@ -147,7 +148,7 @@ const Moviedetail = () => {
                   ""
                 )}
                 <div
-                  className={`absolute top-5 left-60 transform text-3xl h-10 w-10 cursor-pointer transition-opacity duration-300 opacity-0 group-hover:opacity-100 ${
+                  className={`absolute top-5 left-52 md:top-5 md:left-60 transform text-3xl h-10 w-10 cursor-pointer transition-opacity duration-300 opacity-0 group-hover:opacity-100 ${
                     isInList ? "text-red-500" : "text-gray-500"
                   }`}
                   onClick={handleMyListClick}
@@ -208,7 +209,7 @@ const Moviedetail = () => {
             <div className="movie__detailRight">
               <div className="movie__detailRightTop">
                 <br />
-                <div className="movie__name mt-2 md:mt-0 text-3xl md:text-5xl">
+                <div className="movie__name mt-2 md:mt-0 text-2xl md:text-5xl">
                   {currentMovieDetail.original_title}
                 </div>
                 <div className="movie__tagline">
@@ -219,9 +220,10 @@ const Moviedetail = () => {
                   )}
                 </div>
                 <div className="movie__rating">
-                  {currentMovieDetail.vote_average}{" "}
-                  <i className="fas fa-star" />
-                  <span className="movie__voteCount">
+                <FontAwesomeIcon className="text-yellow-400" icon={faStar} />
+                  {currentMovieDetail.vote_average}
+                 
+                  <span className="movie__voteCount hidden md:block">
                     ({currentMovieDetail.vote_count} votes)
                   </span>
                 </div>
@@ -231,10 +233,10 @@ const Moviedetail = () => {
                 <div className="movie__releaseDate">
                   Release date: {currentMovieDetail.release_date}
                 </div>
-                <div className="movie__genres pt-7 pb-0">
+                <div className="movie__genres pt-0 md:pt-7 pb-0">
                   {currentMovieDetail.genres &&
                     currentMovieDetail.genres.map((genre) => (
-                      <span className="movie__genre" key={genre.id}>
+                      <span className="movie__genre hidden md:block" key={genre.id}>
                         {genre.name}
                       </span>
                     ))}
