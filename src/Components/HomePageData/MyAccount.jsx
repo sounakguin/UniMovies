@@ -136,13 +136,14 @@ const MyAccount = () => {
     return <p>Loading...</p>;
   }
 
+  // Determine if there's data to display
+  const hasContent = Object.keys(movieDetails).length > 0 || Object.keys(tvDetails).length > 0;
+
   return (
     <div
-      className="relative flex items-center justify-center p-4"
+      className={`relative flex flex-col justify-center items-center ${hasContent ? 'h-full' : 'h-screen'} bg-cover bg-center`}
       style={{
-        backgroundImage: "url('/public/Images/solo.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundImage: "url('/Images/solo.jpg')", // Fixed path
       }}
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>

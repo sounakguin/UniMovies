@@ -46,13 +46,13 @@ export default function People() {
     };
   }, []);
 
-  const handeldata = (data) => {
+  const handleData = (data) => {
     setPeople(data);
   };
 
   return (
     <div className="md:w-3/4 mx-auto">
-      <SearchbarPeople onSearch={handeldata} />
+      <SearchbarPeople onSearch={handleData} />
       <div className="flex flex-wrap justify-center mt-5">
         {people.map((actor) => (
           <div
@@ -64,7 +64,7 @@ export default function People() {
                 src={
                   actor.profile_path
                     ? `https://image.tmdb.org/t/p/w500${actor.profile_path}`
-                    : ""
+                    : "Images/ok.jpeg"
                 }
                 alt={actor.name}
                 className="w-full h-auto"
