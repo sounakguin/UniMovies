@@ -4,22 +4,24 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 // Memoized Carousel component to prevent unnecessary re-renders
-const MemoizedCarousel = React.memo(({ items, responsive, renderItem, autoPlay }) => (
-  <Carousel
-    responsive={responsive}
-    infinite={true}
-    autoPlay={autoPlay}
-    autoPlaySpeed={5000}
-    keyBoardControl={true}
-    transitionDuration={1000}
-    arrows={true}
-    showDots={false}
-    containerClass="carousel-container"
-    itemClass="carousel-item"
-  >
-    {items.map(renderItem)}
-  </Carousel>
-));
+const MemoizedCarousel = React.memo(
+  ({ items, responsive, renderItem, autoPlay }) => (
+    <Carousel
+      responsive={responsive}
+      infinite={true}
+      autoPlay={autoPlay}
+      autoPlaySpeed={5000}
+      keyBoardControl={true}
+      transitionDuration={1000}
+      arrows={true}
+      showDots={false}
+      containerClass="carousel-container"
+      itemClass="carousel-item"
+    >
+      {items.map(renderItem)}
+    </Carousel>
+  )
+);
 
 const SingleMovieDetails = () => {
   const API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
@@ -42,15 +44,34 @@ const SingleMovieDetails = () => {
         similarResponse,
         recommendationResponse,
       ] = await Promise.all([
-        fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`),
-        fetch(`https://api.themoviedb.org/3/movie/${id}/images?api_key=${API_KEY}&language=en-US&include_image_language=en,null`),
-        fetch(`https://api.themoviedb.org/3/movie/${id}/images?api_key=${API_KEY}&language=en-US&include_image_language=null,en`),
-        fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`),
-        fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${API_KEY}&language=en-US`),
-        fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${API_KEY}&language=en-US`),
+        fetch(
+          `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`
+        ),
+        fetch(
+          `https://api.themoviedb.org/3/movie/${id}/images?api_key=${API_KEY}&language=en-US&include_image_language=en,null`
+        ),
+        fetch(
+          `https://api.themoviedb.org/3/movie/${id}/images?api_key=${API_KEY}&language=en-US&include_image_language=null,en`
+        ),
+        fetch(
+          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`
+        ),
+        fetch(
+          `https://api.themoviedb.org/3/movie/${id}/similar?api_key=${API_KEY}&language=en-US`
+        ),
+        fetch(
+          `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${API_KEY}&language=en-US`
+        ),
       ]);
 
-      if (!videosResponse.ok || !postersResponse.ok || !backdropsResponse.ok || !creditsResponse.ok || !similarResponse.ok || !recommendationResponse.ok) {
+      if (
+        !videosResponse.ok ||
+        !postersResponse.ok ||
+        !backdropsResponse.ok ||
+        !creditsResponse.ok ||
+        !similarResponse.ok ||
+        !recommendationResponse.ok
+      ) {
         throw new Error("Failed to fetch some movie data");
       }
 
@@ -86,7 +107,14 @@ const SingleMovieDetails = () => {
   }, [fetchMovieData]);
 
   const responsive = {
-    superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
+    superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 7 },
+    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 6 },
+    tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
+    mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+  };
+
+  const responsive5 = {
+    superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 4 },
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4 },
     tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
     mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
@@ -139,7 +167,7 @@ const SingleMovieDetails = () => {
         <iframe
           src={`https://www.youtube.com/embed/${video.key}`}
           title={video.name}
-          className="w-auto h-52 border-none"
+          className="w-auto h-60 border-none"
           allowFullScreen
         ></iframe>
       </div>
@@ -177,6 +205,7 @@ const SingleMovieDetails = () => {
             />
           </div>
         )}
+        <p className="text-white text-center pt-4 pb-5">{movie.title}</p>
       </div>
     </Link>
   );
@@ -198,13 +227,13 @@ const SingleMovieDetails = () => {
       )}
 
       {videos.length > 0 && (
-        <div className="mb-8">
+        <div className="mb-0 md:mb-8">
           <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2 text-center md:text-left">
             Watch Videos and Trailers
           </h2>
           <MemoizedCarousel
             items={videos}
-            responsive={responsive}
+            responsive={responsive5}
             renderItem={renderVideos}
             autoPlay={false}
           />
@@ -219,7 +248,13 @@ const SingleMovieDetails = () => {
           <MemoizedCarousel
             items={backdrops}
             responsive={responsive4}
-            renderItem={(image) => renderImages(image, 'https://image.tmdb.org/t/p/original', 'Backdrop')}
+            renderItem={(image) =>
+              renderImages(
+                image,
+                "https://image.tmdb.org/t/p/original",
+                "Backdrop"
+              )
+            }
             autoPlay={true}
           />
         </div>
@@ -233,7 +268,9 @@ const SingleMovieDetails = () => {
           <MemoizedCarousel
             items={posters}
             responsive={responsive3}
-            renderItem={(image) => renderImages(image, 'https://image.tmdb.org/t/p/w500', 'Poster')}
+            renderItem={(image) =>
+              renderImages(image, "https://image.tmdb.org/t/p/w500", "Poster")
+            }
             autoPlay={true}
           />
         </div>
@@ -241,27 +278,39 @@ const SingleMovieDetails = () => {
 
       {similar.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 text-center md:text-left">
+          <h2 className="text-xl font-semibold text-white pb-5  text-center md:text-left">
             Similar Movies
           </h2>
           <MemoizedCarousel
             items={similar}
             responsive={responsive2}
-            renderItem={(movie) => renderMovies(movie, 'https://image.tmdb.org/t/p/w500', 'Similar Movie')}
+            renderItem={(movie) =>
+              renderMovies(
+                movie,
+                "https://image.tmdb.org/t/p/w500",
+                "Similar Movie"
+              )
+            }
             autoPlay={false}
           />
         </div>
       )}
 
       {recommendation.length > 0 && (
-        <div>
-          <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 text-center md:text-left">
+        <div className="">
+          <h2 className="text-xl font-semibold text-white pb-5 text-center md:text-left">
             Recommended Movies
           </h2>
           <MemoizedCarousel
             items={recommendation}
             responsive={responsive2}
-            renderItem={(movie) => renderMovies(movie, 'https://image.tmdb.org/t/p/w500', 'Recommended Movie')}
+            renderItem={(movie) =>
+              renderMovies(
+                movie,
+                "https://image.tmdb.org/t/p/w500",
+                "Recommended Movie"
+              )
+            }
             autoPlay={false}
           />
         </div>

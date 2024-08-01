@@ -249,7 +249,7 @@ const Moviedetail = () => {
                     ))}
                 </div>
                 <div className="mt-10">
-                  <div className="synopsisText">Synopsis</div>
+                  <div className="synopsisText pb-3 ">Synopsis</div>
                   <div>{currentMovieDetail.overview}</div>
                 </div>
               </div>
