@@ -61,6 +61,7 @@ const MovieItem = React.memo(({ movie, type }) => (
         effect="blur"
         placeholderSrc="path/to/placeholder-image.jpg"
       />
+      <div className="hidden md:block">
       <div className="cards__overlay">
         <div className="card__title">
           {type === "movie" ? movie.original_title : movie.original_name}
@@ -71,6 +72,7 @@ const MovieItem = React.memo(({ movie, type }) => (
         <div className="card__description">
           {movie.overview.slice(0, 115) + "..."}
         </div>
+      </div>
       </div>
     </Link>
   </div>

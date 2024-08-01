@@ -23,7 +23,7 @@ function ForgotPassword() {
     try {
       await sendPasswordResetEmail(auth, email);
     } catch (error) {
-      console.log(error.message);
+    
     }
   };
 

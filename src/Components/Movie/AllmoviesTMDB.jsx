@@ -253,7 +253,8 @@ export default function AllmoviesTMDB() {
               No image available
             </div>
           )}
-          <div className="overlay">
+         <div className="hidden md:block">
+         <div className="overlay ">
             <div className="title">{movie.original_title}</div>
             <div className="runtime">
               {movie.release_date}
@@ -269,6 +270,7 @@ export default function AllmoviesTMDB() {
               {movie.overview.slice(0, 115) + "..."}
             </div>
           </div>
+         </div>
         </div>
       </Link>
     ))}

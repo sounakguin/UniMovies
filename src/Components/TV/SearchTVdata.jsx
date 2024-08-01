@@ -17,7 +17,7 @@ export default function SearchTVdata({ Searchdata }) {
           throw new Error(`Failed to fetch TV shows: ${response.statusText}`);
         }
         const data = await response.json();
-        console.log(data);
+       
         Searchdata(data.results); // Pass data to parent component
       } catch (error) {
         console.error("Error fetching TV shows:", error);

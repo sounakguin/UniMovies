@@ -29,10 +29,10 @@ export default function Navbar() {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          console.log("Fetched user data:", data);
+     
           setFullName(data.FullName || "");
         } else {
-          console.log("No such document!");
+         
         }
       } else {
         setUser(null);
@@ -153,7 +153,7 @@ export default function Navbar() {
         }`}
       >
         <div className="flex flex-col h-full p-4 space-y-4">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center ">
             <span className="text-white text-2xl font-mono">UNIMOVIES</span>
             <button
               onClick={toggleMenu}
@@ -162,6 +162,7 @@ export default function Navbar() {
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
+          <div className="border border-white"></div>
           <div className="flex flex-col flex-grow ">
             <Link to="/Allmovies" className="text-white py-2" onClick={closeMenu}>
               AllMovies

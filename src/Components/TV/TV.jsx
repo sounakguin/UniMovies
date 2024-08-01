@@ -104,20 +104,20 @@ export default function TV() {
     <div>
       <br />
       <SearchTVdata Searchdata={handleSearch} />
-      <br/>
+      <br />
       <FilterTV
         genres={tvGenres}
         selectedGenre={selectedGenre}
         handleGenreClick={handleGenreClick}
       />
       <div className="hidden md:block">
-      <p className="text-orange-300 text-center text-3xl pt-6">
-        Special Filter
-      </p>
-      <div className="flex justify-center mt-5 w-3/4 mx-auto gap-4">
-        <button
-          onClick={() => handleCategoryChange("popular")}
-          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+        <p className="text-orange-300 text-center text-3xl pt-6">
+          Special Filter
+        </p>
+        <div className="flex justify-center mt-5 w-3/4 mx-auto gap-4">
+          <button
+            onClick={() => handleCategoryChange("popular")}
+            className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
             ${
               selectedCategory === "popular"
                 ? "bg-blue-500 text-white"
@@ -129,15 +129,15 @@ export default function TV() {
                 : "border border-gray-300"
             }
           `}
-          style={{
-            borderRadius: "8px",
-          }}
-        >
-          Popular
-        </button>
-        <button
-          onClick={() => handleCategoryChange("airing_today")}
-          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            style={{
+              borderRadius: "8px",
+            }}
+          >
+            Popular
+          </button>
+          <button
+            onClick={() => handleCategoryChange("airing_today")}
+            className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
             ${
               selectedCategory === "airing_today"
                 ? "bg-blue-500 text-white"
@@ -149,15 +149,15 @@ export default function TV() {
                 : "border border-gray-300"
             }
           `}
-          style={{
-            borderRadius: "8px",
-          }}
-        >
-          Airing Today
-        </button>
-        <button
-          onClick={() => handleCategoryChange("on_the_air")}
-          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            style={{
+              borderRadius: "8px",
+            }}
+          >
+            Airing Today
+          </button>
+          <button
+            onClick={() => handleCategoryChange("on_the_air")}
+            className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
             ${
               selectedCategory === "on_the_air"
                 ? "bg-blue-500 text-white"
@@ -169,15 +169,15 @@ export default function TV() {
                 : "border border-gray-300"
             }
           `}
-          style={{
-            borderRadius: "8px",
-          }}
-        >
-          On TV
-        </button>
-        <button
-          onClick={() => handleCategoryChange("top_rated")}
-          className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
+            style={{
+              borderRadius: "8px",
+            }}
+          >
+            On TV
+          </button>
+          <button
+            onClick={() => handleCategoryChange("top_rated")}
+            className={`relative py-3 px-6 text-lg rounded-md cursor-pointer transition-colors duration-300
             ${
               selectedCategory === "top_rated"
                 ? "bg-blue-500 text-white"
@@ -189,13 +189,13 @@ export default function TV() {
                 : "border border-gray-300"
             }
           `}
-          style={{
-            borderRadius: "8px",
-          }}
-        >
-          Top Rated
-        </button>
-      </div>
+            style={{
+              borderRadius: "8px",
+            }}
+          >
+            Top Rated
+          </button>
+        </div>
       </div>
 
       <br />
@@ -206,7 +206,6 @@ export default function TV() {
               to={`/tv/${tvShow.id}`}
               style={{ textDecoration: "none", color: "white" }}
               key={tvShow.id}
-              
             >
               <div className="movie-card m-2">
                 {tvShow.poster_path ? (
@@ -235,22 +234,22 @@ export default function TV() {
                     No image available
                   </div>
                 )}
-
-                <div className="overlay">
-                  <div className="title">{tvShow.original_name}</div>
-                  <div className="runtime">
-                    {tvShow.first_air_date}
-                    <span className="rating">
-                    <FontAwesomeIcon
-                        className="text-yellow-400 pr-1"
-                        icon={faStar}
-                      />
-                      {tvShow.vote_average}
-              
-                    </span>
-                  </div>
-                  <div className="description">
-                    {tvShow.overview.slice(0, 115) + "..."}
+                <div className="hidden md:block">
+                  <div className="overlay">
+                    <div className="title">{tvShow.original_name}</div>
+                    <div className="runtime">
+                      {tvShow.first_air_date}
+                      <span className="rating">
+                        <FontAwesomeIcon
+                          className="text-yellow-400 pr-1"
+                          icon={faStar}
+                        />
+                        {tvShow.vote_average}
+                      </span>
+                    </div>
+                    <div className="description">
+                      {tvShow.overview.slice(0, 115) + "..."}
+                    </div>
                   </div>
                 </div>
               </div>

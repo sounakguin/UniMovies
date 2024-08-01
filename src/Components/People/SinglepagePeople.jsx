@@ -11,7 +11,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import ok from "../../../public/Images/ok.jpeg"; 
+import ok from "../../../public/Images/ok.jpeg";
 
 export default function SinglepagePeople() {
   const [actorPersonalData, setActorPersonalData] = useState(null);
@@ -36,7 +36,7 @@ export default function SinglepagePeople() {
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 1,
+      items: 2,
     },
   };
 
@@ -174,27 +174,31 @@ export default function SinglepagePeople() {
         >
           {actorCredits.map((data) => (
             <Link to={`/movie/${data.id}`} key={data.id}>
-              <div className="px-2 flex justify-center">
+              <div className="px-2 flex flex-col justify-center pt-2">
                 {data.poster_path ? (
                   <LazyLoadImage
                     src={`https://image.tmdb.org/t/p/original${data.poster_path}`}
                     alt={data.title}
                     effect="blur"
-                    className="h-96 w-auto rounded-lg shadow-lg border-2 border-white"
+                    className="h-64 md:h-96 w-auto rounded-lg shadow-lg border-2 border-white"
                   />
+                  
                 ) : (
                   <img
                     src={ok}
                     alt={data.title}
-                    className="h-96 w-auto rounded-lg shadow-lg border-2 border-white"
+                    className="h-auto w-auto rounded-lg shadow-lg border-2 border-white"
                   />
                 )}
+              
               </div>
+              
             </Link>
           ))}
+     
         </Carousel>
       </div>
-      <div className="mt-8">
+      <div className="mt-5">
         <h3 className="text-white text-2xl mb-4">
           Other Images of {actorPersonalData.name}
         </h3>
@@ -211,12 +215,15 @@ export default function SinglepagePeople() {
           itemClass="carousel-item"
         >
           {actorImages.map((imagedata) => (
-            <div key={imagedata.file_path} className="px-2 flex justify-center ">
+            <div
+              key={imagedata.file_path}
+              className="px-2 flex justify-center pt-2"
+            >
               <LazyLoadImage
                 src={`https://image.tmdb.org/t/p/original${imagedata.file_path}`}
                 alt=""
                 effect="blur"
-                className="h-96 w-auto rounded-lg shadow-lg border-2 border-white"
+                className="h-64 md:h-96 w-auto rounded-lg shadow-lg border-2 border-white"
               />
             </div>
           ))}

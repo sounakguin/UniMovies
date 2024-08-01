@@ -240,7 +240,7 @@ body,
 
 .cards__overlay {
   position: absolute;
-  padding: 0 1rem 1rem 1rem;
+  padding: 0 1.5rem 1rem 0.5rem;
   bottom: 0px;
   height: 290px;
   display: flex;
@@ -283,8 +283,11 @@ body,
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden; /* Ensure no overflow issues */
+  overflow: hidden;
 }
+
+
+
 
 .movie__intro {
   width: 100%;

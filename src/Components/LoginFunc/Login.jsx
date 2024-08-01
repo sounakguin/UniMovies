@@ -25,7 +25,7 @@ function Login() {
       [name]: value,
     });
 
-    // Clear previous error for the field when typing
+ 
     setError({
       ...error,
       [name]: "",
@@ -33,7 +33,7 @@ function Login() {
   };
 
   const validateEmail = (email) => {
-    // Custom email validation regex
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -42,7 +42,7 @@ function Login() {
     e.preventDefault();
     const { email, password } = formdata;
 
-    // Validation checks
+
     let hasError = false;
     const newErrors = {
       email: "",
@@ -61,7 +61,7 @@ function Login() {
 
     if (hasError) {
       setError(newErrors);
-      // Show toast for each error
+ 
       if (newErrors.email) toast.error(newErrors.email);
       if (newErrors.password) toast.error(newErrors.password);
       return;
@@ -77,7 +77,7 @@ function Login() {
         password: "",
       });
     } catch (error) {
-      // Show error message based on Firebase error code
+     
       if (error.code.includes("auth/user-not-found")) {
         toast.error("No user found with this email.");
       } else if (error.code.includes("auth/wrong-password")) {

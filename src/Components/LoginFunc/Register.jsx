@@ -86,7 +86,7 @@ function Register() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      console.log("User created:", user);
+    
 
       await setDoc(doc(db, "Users", user.uid), {
         Email: user.email,
@@ -94,7 +94,7 @@ function Register() {
         PhoneNumber: phone,
         Password: password,
       });
-      console.log("Data stored in Firestore");
+      
 
       setFormData({
         email: "",
