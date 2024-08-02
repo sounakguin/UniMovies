@@ -6,8 +6,9 @@ import "react-multi-carousel/lib/styles.css";
 const Carousel = lazy(() => import("react-multi-carousel"));
 
 const responsive = {
-  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 6 },
-  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 5 },
+  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 7 },
+  desktop: { breakpoint: { max: 3000, min: 2000 }, items: 5 },
+  laptop: { breakpoint: { max: 2000, min: 1024 }, items: 6 },
   tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
   mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
 };
@@ -185,7 +186,7 @@ export default function SingleTVpage() {
           <CarouselSection
             title="Credits"
             items={credits}
-            showArrows={true} 
+            showArrows={true}
             responsive={responsive}
             renderItem={(credit) => (
               <Link key={credit.id} to={`/person/${credit.id}`}>
@@ -210,27 +211,27 @@ export default function SingleTVpage() {
           />
         )}
 
-       <div className="hidden md:block">
-       {videos && videos.length > 0 && (
-          <CarouselSection
-            title="Watch Videos and Trailers"
-            items={videos}
-            responsive={responsive3}
-            renderItem={(video) => (
-              <div key={video.key} className="px-2 flex justify-center ">
-                <div className="rounded-lg">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${video.key}`}
-                    title={video.name}
-                    className="w-auto h-52 border-none"
-                    allowFullScreen
-                  ></iframe>
+        <div className="hidden md:block">
+          {videos && videos.length > 0 && (
+            <CarouselSection
+              title="Watch Videos and Trailers"
+              items={videos}
+              responsive={responsive3}
+              renderItem={(video) => (
+                <div key={video.key} className="px-2 flex justify-center ">
+                  <div className="rounded-lg">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${video.key}`}
+                      title={video.name}
+                      className="w-auto h-52 border-none"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
                 </div>
-              </div>
-            )}
-          />
-        )}
-       </div>
+              )}
+            />
+          )}
+        </div>
 
         {backdrops && backdrops.length > 0 && (
           <CarouselSection
@@ -268,7 +269,6 @@ export default function SingleTVpage() {
                       <span className="text-gray-500">No Poster Available</span>
                     </div>
                   )}
-             
                 </div>
               </Link>
             )}
