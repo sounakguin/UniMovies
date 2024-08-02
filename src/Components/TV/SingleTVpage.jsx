@@ -268,7 +268,7 @@ export default function SingleTVpage() {
                       <span className="text-gray-500">No Poster Available</span>
                     </div>
                   )}
-                  <p className="text-white text-center pt-2">Poster</p>
+             
                 </div>
               </Link>
             )}

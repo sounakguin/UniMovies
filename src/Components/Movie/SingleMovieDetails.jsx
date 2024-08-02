@@ -265,6 +265,23 @@ const SingleMovieDetails = () => {
         </div>
       )}
 
+{posters.length > 0 && (
+        <div className="mb-0 md:mb-5">
+          <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 pb-5 text-center md:text-left mt-10">
+            Poster Images
+          </h2>
+          <MemoizedCarousel
+            items={posters}
+            responsive={responsive2}
+            renderItem={(image) =>
+              renderImages(image, "https://image.tmdb.org/t/p/original", "poster")
+            }
+            autoPlay={true}
+            showArrows={isDesktopOrLarger}
+          />
+        </div>
+      )}
+
       {similar.length > 0 && (
         <div className="mb-0 md:mb-5">
           <h2 className="text-xl pb-5 font-semibold text-white pl-0 md:pl-2 text-center md:text-left mt-10">
