@@ -33,26 +33,61 @@ const responsive4 = {
   mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
 };
 
-const CarouselSection = ({ title, items, renderItem, responsive }) => (
-  <div className="mb-8">
-    <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 text-center md:text-left">
-      {title}
-    </h2>
-    <Carousel
-      responsive={responsive}
-      infinite={true}
-      autoPlay={false}
-      keyBoardControl={true}
-      transitionDuration={1000}
-      arrows={true}
-      showDots={false}
-      containerClass="carousel-container"
-      itemClass="carousel-item"
-    >
-      {items.map(renderItem)}
-    </Carousel>
-  </div>
-);
+const CarouselSection = ({ title, items, renderItem, responsive }) => {
+  // Determine whether to show arrows based on window width
+  const [showArrows, setShowArrows] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setShowArrows(window.innerWidth > 1024); // Adjust threshold as needed
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Check on mount
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <div className="mb-8">
+      <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 text-center md:text-left">
+        {title}
+      </h2>
+      <Carousel
+        responsive={responsive}
+        infinite={true}
+        autoPlay={false}
+        keyBoardControl={true}
+        transitionDuration={1000}
+        arrows={showArrows} // Toggle arrows based on state
+        showDots={false}
+        draggable={true}
+        swipeable={true}
+        touchDrag={true}
+        containerClass="carousel-container"
+        itemClass="carousel-item"
+        customRightArrow={
+          showArrows ? (
+            <div className="custom-arrow custom-arrow-right">
+              <span>&gt;</span> {/* Adjust arrow styling here */}
+            </div>
+          ) : null
+        }
+        customLeftArrow={
+          showArrows ? (
+            <div className="custom-arrow custom-arrow-left">
+              <span>&lt;</span> {/* Adjust arrow styling here */}
+            </div>
+          ) : null
+        }
+      >
+        {items.map(renderItem)}
+      </Carousel>
+    </div>
+  );
+};
 
 export default function SingleTVpage() {
   const API_KEY = "d00cb3e60d55a92130bdafb5ff634708";
@@ -70,7 +105,6 @@ export default function SingleTVpage() {
   useEffect(() => {
     const fetchTVData = async () => {
       try {
-        // Fetch data in parallel
         const [
           videosResponse,
           imagesResponse,
@@ -151,10 +185,11 @@ export default function SingleTVpage() {
           <CarouselSection
             title="Credits"
             items={credits}
+            showArrows={true} 
             responsive={responsive}
             renderItem={(credit) => (
               <Link key={credit.id} to={`/person/${credit.id}`}>
-                <div className=" flex justify-center items-center mt-5 flex-col">
+                <div className="flex justify-center items-center mt-5 flex-col">
                   {credit.profile_path ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${credit.profile_path}`}
@@ -175,13 +210,14 @@ export default function SingleTVpage() {
           />
         )}
 
-        {videos && videos.length > 0 && (
+       <div className="hidden md:block">
+       {videos && videos.length > 0 && (
           <CarouselSection
             title="Watch Videos and Trailers"
             items={videos}
             responsive={responsive3}
             renderItem={(video) => (
-              <div key={video.key} className="px-2 flex justify-center">
+              <div key={video.key} className="px-2 flex justify-center ">
                 <div className="rounded-lg">
                   <iframe
                     src={`https://www.youtube.com/embed/${video.key}`}
@@ -194,6 +230,7 @@ export default function SingleTVpage() {
             )}
           />
         )}
+       </div>
 
         {backdrops && backdrops.length > 0 && (
           <CarouselSection
@@ -205,7 +242,7 @@ export default function SingleTVpage() {
                 <img
                   src={`https://image.tmdb.org/t/p/original${backdrop.file_path}`}
                   alt="Backdrop"
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-cover rounded-lg pt-5"
                 />
               </div>
             )}
@@ -218,19 +255,22 @@ export default function SingleTVpage() {
             items={posters}
             responsive={responsive2}
             renderItem={(poster) => (
-              <div key={poster.file_path} className="p-2">
-                {poster.file_path ? (
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${poster.file_path}`}
-                    alt="Poster"
-                    className="w-full h-full object-cover rounded-lg pt-5"
-                  />
-                ) : (
-                  <div className="h-52 w-full flex items-center justify-center rounded-lg bg-gray-200">
-                    <span className="text-gray-500">No Poster Available</span>
-                  </div>
-                )}
-              </div>
+              <Link key={poster.file_path} to={`/poster/${poster.file_path}`}>
+                <div className="p-2">
+                  {poster.file_path ? (
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${poster.file_path}`}
+                      alt="Poster"
+                      className="w-full h-full object-cover rounded-lg pt-5"
+                    />
+                  ) : (
+                    <div className="h-52 w-full flex items-center justify-center rounded-lg bg-gray-200">
+                      <span className="text-gray-500">No Poster Available</span>
+                    </div>
+                  )}
+                  <p className="text-white text-center pt-2">Poster</p>
+                </div>
+              </Link>
             )}
           />
         )}
@@ -242,24 +282,19 @@ export default function SingleTVpage() {
             responsive={responsive2}
             renderItem={(show) => (
               <Link key={show.id} to={`/tv/${show.id}`}>
-                <div className="p-2 flex justify-center items-center mt-5 flex-col">
+                <div className="p-2">
                   {show.poster_path ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
                       alt={show.name}
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-cover rounded-lg pt-5"
                     />
                   ) : (
-                    <div>
-                      <img
-                        src="/Images/klkl.jpg"
-                        alt="Dummy"
-                        className="w-full h-full object-cover rounded-lg"
-                        loading="lazy"
-                      />
+                    <div className="h-52 w-full flex items-center justify-center rounded-lg bg-gray-200">
+                      <span className="text-gray-500">No Poster Available</span>
                     </div>
                   )}
-                  <p className="text-white text-center pt-4 ">{show.name}</p>
+                  <p className="text-white text-center pt-2">{show.name}</p>
                 </div>
               </Link>
             )}
@@ -273,24 +308,19 @@ export default function SingleTVpage() {
             responsive={responsive2}
             renderItem={(recommendation) => (
               <Link key={recommendation.id} to={`/tv/${recommendation.id}`}>
-                <div className="p-2 flex justify-center items-center mt-5 flex-col">
+                <div className="p-2">
                   {recommendation.poster_path ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w500${recommendation.poster_path}`}
                       alt={recommendation.name}
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-cover rounded-lg pt-5"
                     />
                   ) : (
-                    <div>
-            <img
-              src="/Images/klkl.jpg"
-              alt="Dummy"
-              className="w-full h-full object-cover rounded-lg"
-              loading="lazy"
-            />
-          </div>
+                    <div className="h-52 w-full flex items-center justify-center rounded-lg bg-gray-200">
+                      <span className="text-gray-500">No Poster Available</span>
+                    </div>
                   )}
-                  <p className="text-white text-center pt-4 ">
+                  <p className="text-white text-center pt-2">
                     {recommendation.name}
                   </p>
                 </div>

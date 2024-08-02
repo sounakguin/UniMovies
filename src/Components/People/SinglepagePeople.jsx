@@ -12,6 +12,7 @@ import "react-multi-carousel/lib/styles.css";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import ok from "../../../public/Images/ok.jpeg";
+import { useMediaQuery } from 'react-responsive';
 
 export default function SinglepagePeople() {
   const [actorPersonalData, setActorPersonalData] = useState(null);
@@ -73,6 +74,8 @@ export default function SinglepagePeople() {
   useEffect(() => {
     fetchData();
   }, [id]);
+
+  const isDesktopOrLarger = useMediaQuery({ minWidth: 1024 });
 
   if (!actorPersonalData || !actorExternalIds) {
     return <p>Loading...</p>;
@@ -166,8 +169,10 @@ export default function SinglepagePeople() {
           autoPlay={true}
           autoPlaySpeed={5000}
           keyBoardControl={true}
-          transitionDuration={1000}
-          arrows={true}
+          transitionDuration={500}
+          arrows={isDesktopOrLarger}
+          swipeable={true}
+          draggable={true}
           showDots={false}
           containerClass="carousel-container"
           itemClass="carousel-item"
@@ -208,8 +213,10 @@ export default function SinglepagePeople() {
           autoPlay={true}
           autoPlaySpeed={5000}
           keyBoardControl={true}
-          transitionDuration={1000}
-          arrows={true}
+          transitionDuration={500}
+          arrows={isDesktopOrLarger}
+          swipeable={true}
+          draggable={true}
           showDots={false}
           containerClass="carousel-container"
           itemClass="carousel-item"

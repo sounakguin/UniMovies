@@ -16,7 +16,6 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-// Define removeDuplicatesByPath function outside of the component
 const removeDuplicatesByPath = (array) => {
   const seen = new Set();
   return array.filter((item) => {
@@ -136,22 +135,26 @@ const MovieList = () => {
 
   const uniqueUpcomingMovies = removeDuplicatesByPath(upcomingMovies);
 
+  const carouselSettings = {
+    responsive,
+    infinite: true,
+    autoPlay: true,
+    autoPlaySpeed: 5000,
+    keyBoardControl: true,
+    transitionDuration: 1000,
+    swipeable: true,
+    draggable: true,
+    showDots: false,
+    arrows: window.innerWidth >= 1024, // Show arrows only on desktop
+  };
+
   return (
     <div>
       <section className="movie-section">
         <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
           Popular TV Shows
         </h2>
-        <Carousel
-          responsive={responsive}
-          infinite
-          autoPlay
-          autoPlaySpeed={5000}
-          keyBoardControl
-          transitionDuration={1000}
-          arrows
-          showDots={false}
-        >
+        <Carousel {...carouselSettings}>
           {popularTvShows.map((movie) => (
             <MovieItem key={movie.id} movie={movie} type="tv" />
           ))}
@@ -162,16 +165,7 @@ const MovieList = () => {
         <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
           Top-Rated Movies
         </h2>
-        <Carousel
-          responsive={responsive}
-          infinite
-          autoPlay
-          autoPlaySpeed={5000}
-          keyBoardControl
-          transitionDuration={1000}
-          arrows
-          showDots={false}
-        >
+        <Carousel {...carouselSettings}>
           {topRatedMovies.map((movie) => (
             <MovieItem key={movie.id} movie={movie} type="movie" />
           ))}
@@ -189,16 +183,7 @@ const MovieList = () => {
         <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
           Popular Movies
         </h2>
-        <Carousel
-          responsive={responsive}
-          infinite
-          autoPlay
-          autoPlaySpeed={5000}
-          keyBoardControl
-          transitionDuration={1000}
-          arrows
-          showDots={false}
-        >
+        <Carousel {...carouselSettings}>
           {popularMovies.map((movie) => (
             <MovieItem key={movie.id} movie={movie} type="movie" />
           ))}
@@ -226,16 +211,7 @@ const MovieList = () => {
         <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
           Popular Anime
         </h2>
-        <Carousel
-          responsive={responsive}
-          infinite
-          autoPlay
-          autoPlaySpeed={5000}
-          keyBoardControl
-          transitionDuration={1000}
-          arrows
-          showDots={false}
-        >
+        <Carousel {...carouselSettings}>
           {popularAnimationTvShows.map((movie) => (
             <MovieItem key={movie.id} movie={movie} type="tv" />
           ))}
@@ -246,16 +222,7 @@ const MovieList = () => {
         <h2 className="text-white text-xl text-center md:text-left md:text-3xl pl-0 md:pl-4 pb-5">
           Upcoming Movies
         </h2>
-        <Carousel
-          responsive={responsive}
-          infinite
-          autoPlay
-          autoPlaySpeed={5000}
-          keyBoardControl
-          transitionDuration={1000}
-          arrows
-          showDots={false}
-        >
+        <Carousel {...carouselSettings}>
           {uniqueUpcomingMovies.map((movie) => (
             <MovieItem key={movie.id} movie={movie} type="movie" />
           ))}

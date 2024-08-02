@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { useMediaQuery } from 'react-responsive';
 
 // Memoized Carousel component to prevent unnecessary re-renders
 const MemoizedCarousel = React.memo(
-  ({ items, responsive, renderItem, autoPlay }) => (
+  ({ items, responsive, renderItem, autoPlay, showArrows }) => (
     <Carousel
       responsive={responsive}
       infinite={true}
@@ -13,10 +14,13 @@ const MemoizedCarousel = React.memo(
       autoPlaySpeed={5000}
       keyBoardControl={true}
       transitionDuration={1000}
-      arrows={true}
+      arrows={showArrows}
       showDots={false}
       containerClass="carousel-container"
       itemClass="carousel-item"
+      draggable={true} // Enable dragging
+      swipeable={true} // Enable swiping
+      touchDrag={true} // Enable touch drag
     >
       {items.map(renderItem)}
     </Carousel>
@@ -105,6 +109,8 @@ const SingleMovieDetails = () => {
   useEffect(() => {
     fetchMovieData();
   }, [fetchMovieData]);
+
+  const isDesktopOrLarger = useMediaQuery({ minWidth: 1024 });
 
   const responsive = {
     superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 7 },
@@ -222,96 +228,73 @@ const SingleMovieDetails = () => {
             responsive={responsive}
             renderItem={renderCredits}
             autoPlay={false}
+        
           />
         </div>
       )}
 
       {videos.length > 0 && (
-        <div className="mb-0 md:mb-8">
-          <h2 className="text-xl font-semibold mb-4 mt-5 text-white pl-0 md:pl-2 text-center md:text-left">
-            Watch Videos and Trailers
+        <div className="mb-0 md:mb-5 hidden md:block">
+          <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 text-center md:text-left mt-10">
+            Related Videos
           </h2>
           <MemoizedCarousel
             items={videos}
             responsive={responsive5}
             renderItem={renderVideos}
             autoPlay={false}
+            showArrows={isDesktopOrLarger}
           />
         </div>
       )}
 
       {backdrops.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
-            Backdrops
+        <div className="mb-0 md:mb-5">
+          <h2 className="text-xl font-semibold text-white pl-0 md:pl-2 pb-5 text-center md:text-left mt-10">
+            Related Images
           </h2>
           <MemoizedCarousel
             items={backdrops}
             responsive={responsive4}
             renderItem={(image) =>
-              renderImages(
-                image,
-                "https://image.tmdb.org/t/p/original",
-                "Backdrop"
-              )
+              renderImages(image, "https://image.tmdb.org/t/p/original", "backdrop")
             }
             autoPlay={true}
-          />
-        </div>
-      )}
-
-      {posters.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-white pl-0 md:pl-2 text-center md:text-left">
-            Posters
-          </h2>
-          <MemoizedCarousel
-            items={posters}
-            responsive={responsive3}
-            renderItem={(image) =>
-              renderImages(image, "https://image.tmdb.org/t/p/w500", "Poster")
-            }
-            autoPlay={true}
+            showArrows={isDesktopOrLarger}
           />
         </div>
       )}
 
       {similar.length > 0 && (
-        <div>
-          <h2 className="text-xl font-semibold text-white pb-5  text-center md:text-left">
-            Similar Movies
+        <div className="mb-0 md:mb-5">
+          <h2 className="text-xl pb-5 font-semibold text-white pl-0 md:pl-2 text-center md:text-left mt-10">
+            Related Similar Movies
           </h2>
           <MemoizedCarousel
             items={similar}
             responsive={responsive2}
             renderItem={(movie) =>
-              renderMovies(
-                movie,
-                "https://image.tmdb.org/t/p/w500",
-                "Similar Movie"
-              )
+              renderMovies(movie, "https://image.tmdb.org/t/p/original", "similar movie")
             }
-            autoPlay={false}
+            autoPlay={true}
+            showArrows={isDesktopOrLarger}
           />
         </div>
       )}
 
       {recommendation.length > 0 && (
-        <div className="">
-          <h2 className="text-xl font-semibold text-white pb-5 text-center md:text-left">
-            Recommended Movies
+        <div className="mb-0 md:mb-5">
+          <h2 className="text-xl font-semibold pb-5 text-white pl-0 md:pl-2 text-center md:text-left ">
+            Recommendation Movies
           </h2>
           <MemoizedCarousel
             items={recommendation}
             responsive={responsive2}
             renderItem={(movie) =>
-              renderMovies(
-                movie,
-                "https://image.tmdb.org/t/p/w500",
-                "Recommended Movie"
-              )
+              renderMovies(movie, "https://image.tmdb.org/t/p/original", "recommendation movie")
             }
-            autoPlay={false}
+            autoPlay={true}
+            showArrows={isDesktopOrLarger}
           />
         </div>
       )}
