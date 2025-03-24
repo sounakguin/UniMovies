@@ -43,7 +43,7 @@ const responsive = {
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
-    items: 2,
+    items: 4,
   },
 };
 
@@ -61,17 +61,17 @@ const MovieItem = React.memo(({ movie, type }) => (
         placeholderSrc="path/to/placeholder-image.jpg"
       />
       <div className="hidden md:block">
-      <div className="cards__overlay">
-        <div className="card__title">
-          {type === "movie" ? movie.original_title : movie.original_name}
+        <div className="cards__overlay">
+          <div className="card__title">
+            {type === "movie" ? movie.original_title : movie.original_name}
+          </div>
+          <div className="card__runtime">
+            {type === "movie" ? movie.release_date : movie.first_air_date}
+          </div>
+          <div className="card__description">
+            {movie.overview.slice(0, 115) + "..."}
+          </div>
         </div>
-        <div className="card__runtime">
-          {type === "movie" ? movie.release_date : movie.first_air_date}
-        </div>
-        <div className="card__description">
-          {movie.overview.slice(0, 115) + "..."}
-        </div>
-      </div>
       </div>
     </Link>
   </div>
